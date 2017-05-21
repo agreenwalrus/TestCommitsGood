@@ -19,6 +19,7 @@ Grammar rules for shell.
 %destructor command { printf ("\ndestructorCMD %s", $$); free((void*)$$); }
 %destructor argument { printf ("\ndestructorARG %s", $$); free((void*)$$); }
 %destructor	variable	{ printf("\nsestructorVAR %s", $$); free((void*)$$); }
+%destructor	value	{ printf("\nsestructorVAL %s", $$); free((void*)$$); }
 
 %syntax_error {  
   printf("\nSyntax error!");  
@@ -42,7 +43,10 @@ program ::= result EOL. { printf("\nprogram ::= result"); }
 result ::= input . { printf("\nresult ::= input"); }
 result ::= input AMPERSAND. { printf("\nresult ::= input AMPERSAND"); }
 result ::= branchig . { printf("\nresult ::= branchig"); }
-result ::= branchig AMPERSAND . { printf("\nresult ::= branchig AMPERSAND"); }
+//result ::= branchig AMPERSAND . { printf("\nresult ::= branchig AMPERSAND"); }
+result ::= variable_declaration . { printf("\nresult ::= variable_declaration"); }
+result ::= for_cycle . { printf("\nresult ::= for_cycle"); }
+result ::= while_cycle . { printf("\nresult ::= while_cycle"); }
 
 //INPUT
 
@@ -79,6 +83,12 @@ command(cmd) ::= WORD(ptr) .	{
 	strcpy(commandDescription->name, cmd); 
 }
 
+//VARIABLE_DECLARATION
+
+//variable_declaration ::= variable(var) EQU value(val) . { printf("\nvariable EQU value %s EQU %s", var, val); }
+variable_declaration ::= variable EQU argument_list . { printf("\nvariable_declaration ::= variable EQU argument_list"); }
+
+
 //REDIRECTION_LIST
 
 redirection_list ::= redirection . { printf("\nredirection_list ::= redirection"); }
@@ -91,24 +101,25 @@ redirection ::= LESS argument . { printf("\nredirection ::= LESS argument"); }
 redirection ::= GREATAMPERSAND argument . { printf("\nredirection ::= GREATAMPERSAND argument"); }
 redirection ::= GREATGREAT argument . { printf("\nredirection ::= GREATGREAT argument"); }
 
-///BRANCHING
+//BRANCHING
 
-branchig ::= IF condition SEMICOLON THEN result ELSE result FI . { printf("\nbranchig ::= IF condition SEMICOLON THEN result ELSE result FI"); }
-branchig ::= IF condition SEMICOLON THEN COLON ELSE result FI . { printf("\nbranchig ::= IF condition SEMICOLON THEN COLON ELSE result FI"); }
-branchig ::= IF condition SEMICOLON THEN result ELSE COLON FI.	{ printf("\nbranchig ::= IF condition SEMICOLON THEN result ELSE COLON FI"); }
+branchig ::= IF condition THEN result ELSE result FI . { printf("\nbranchig ::= IF condition SEMICOLON THEN result ELSE result FI"); }
+branchig ::= IF condition THEN COLON ELSE result FI . { printf("\nbranchig ::= IF condition SEMICOLON THEN COLON ELSE result FI"); }
+branchig ::= IF condition THEN result ELSE COLON FI.	{ printf("\nbranchig ::= IF condition SEMICOLON THEN result ELSE COLON FI"); }
 
 //CONDITION
 
-condition ::= variable LESS value . { printf("\ncondition ::= variable LESS value"); }
-condition ::= variable GREAT value . { printf("\ncondition ::= variable GREAT value"); }
+condition ::= LBRACKET variable LESS value RBRACKET . { printf("\ncondition ::= LBRACKET variable LESS value RBRACKET"); }
+condition ::= LBRACKET variable GREAT value RBRACKET . { printf("\ncondition ::= LBRACKET variable GREAT value RBRACKET"); }
+condition ::= LBRACKET variable EQUEQU value RBRACKET . { printf("\ncondition ::= LBRACKET variable EQUEQU value RBRACKET"); }
 
 //VARIABLE
 variable(var) ::= WORD(ptr) . { var = ptr; printf("\nvariable ::= WORD %s", var);}
 
 //VALUE
 
-value ::= DIGIT . { printf("\nvalue ::= DIGIT"); }
-value ::= WORD . { printf("\nvalue ::= WORD"); }
+value(val) ::= DIGIT(ptr) . { val = ptr; printf("\nvalue ::= DIGIT %s", val); }
+value(val) ::= WORD(ptr) . { val = ptr; printf("\nvalue ::= WORD %s", val); }
 
 //ARGLIST
 
@@ -150,7 +161,13 @@ argument(arg) ::= WORD(ptr) .		{
 	commandDescription->curAmountOfArgs = commandDescription->curAmountOfArgs + 1;
 }
 
+//FOR_CYCLE
 
+for_cycle ::= FOR variable IN argument_list SEMICOLON DO result. { printf("\nfor_cycle ::= FOR variable IN argument_list SEMICOLON DO result"); } 
+
+//WHILE_CYCLE
+
+while_cycle ::= WHILE condition SEMICOLON DO result . { printf("\nwhile_cycle ::= WHILE LBRACKET condition RBRACKET SEMICOLON DO result"); }
 
 
 

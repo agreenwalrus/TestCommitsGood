@@ -18,12 +18,24 @@ Here're described rules for scanning char buffers.
 
 %%
 
+
 "if"					{ return IF; }
 "then"					{ return THEN; }
 "else"					{ return ELSE; }
 "fi"					{ return FI; }
 
+"for"					{ return FOR; }
+"do"					{ return DO; }
+"in"					{ return IN; }
+
+"while"					{ return WHILE; }
+
+
 ";"						{ return SEMICOLON; }
+"="						{ return EQU; }
+"=="					{ return EQUEQU; }
+"["                  	{ return LBRACKET; }
+"]"                   	{ return RBRACKET; } 
 ":"						{ return COLON; }
 "\n"					{ return EOL; }
 ">"						{ return GREAT; }
@@ -37,7 +49,7 @@ Here're described rules for scanning char buffers.
 
 [ \t\r]                 { }
 
-"-"[a-zA-Z]{1,2}		{ 
+"-"{1,2}[a-zA-Z]+		{ 
 	printf("\n\nscanner FLAG: %s", yytext); 
 	yylval.charValue = (char*)malloc(strlen(yytext) + 1);  
 	strcpy(yylval.charValue, yytext); 
@@ -51,7 +63,12 @@ Here're described rules for scanning char buffers.
 	return WORD;	
 }
 
--?[1-9][0-9]* { return DIGIT; }
+-?[1-9][0-9]* {
+	printf("\n\nscanner DIGIT: %s", yytext); 
+	yylval.charValue = (char*)malloc(strlen(yytext) + 1);  
+	strcpy(yylval.charValue, yytext);	
+	return DIGIT; 
+}
 
 ([/a-zA-Z0-9_:\.\-]+("\\\ ")*("\\\"")*("\\\#")*("\\\'")*)+       { 
 	printf("\n\nscanner FILENAME: %s", yytext); 

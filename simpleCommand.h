@@ -15,5 +15,4 @@ struct simpleCommand {
 	//char **args;
 };
 
-
 #endif
