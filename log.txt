@@ -1,43 +1,43 @@
 
-Parser state: Input FILENAME
+Parser state: Input WORD
 
-Parser state: Shift 11
+Parser state: Shift 16
 
-Parser state: Stack: FILENAME
+Parser state: Stack: WORD
 
 Parser state: Input EOL
 
-Parser state: Reduce [command ::= FILENAME].
+Parser state: Reduce [command ::= WORD].
 
-Parser state: Shift 1
+Parser state: Shift 4
 
 Parser state: Stack: command
 
 Parser state: Reduce [command_line ::= command].
 
-Parser state: Shift 17
+Parser state: Shift 25
 
 Parser state: Stack: command_line
 
 Parser state: Reduce [command_line_list ::= command_line].
 
-Parser state: Shift 2
+Parser state: Shift 5
 
 Parser state: Stack: command_line_list
 
 Parser state: Reduce [input ::= command_line_list].
 
-Parser state: Shift 25
+Parser state: Shift 37
 
 Parser state: Stack: input
 
 Parser state: Reduce [result ::= input].
 
-Parser state: Shift 27
+Parser state: Shift 54
 
 Parser state: Stack: result
 
-Parser state: Shift 28
+Parser state: Shift 53
 
 Parser state: Stack: result EOL
 

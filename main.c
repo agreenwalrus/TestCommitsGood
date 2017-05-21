@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <Windows.h>
 
 #include "parser.h"
 #include "scanner.yy.h"
 #include "flexglobal.h"
 #include "simpleCommand.h"
-#include <Windows.h>
+
 
 #define END_OF_SESSION 1
 

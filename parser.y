@@ -6,7 +6,6 @@ Grammar rules for shell.
 %include {
 	#include<stdio.h>
 	#include <stdlib.h>
-	#include"parser.h"
 	#include<assert.h>
 	#include <string.h>
 	#include "simpleCommand.h"
@@ -19,6 +18,7 @@ Grammar rules for shell.
 
 %destructor command { printf ("\ndestructorCMD %s", $$); free((void*)$$); }
 %destructor argument { printf ("\ndestructorARG %s", $$); free((void*)$$); }
+%destructor	variable	{ printf("\nsestructorVAR %s", $$); free((void*)$$); }
 
 %syntax_error {  
   printf("\nSyntax error!");  
@@ -40,7 +40,9 @@ program ::= result EOL. { printf("\nprogram ::= result"); }
 //RESULT
 
 result ::= input . { printf("\nresult ::= input"); }
-result ::= result AMPERSAND. { printf("\nresult ::= input AMPERSAND"); }
+result ::= input AMPERSAND. { printf("\nresult ::= input AMPERSAND"); }
+result ::= branchig . { printf("\nresult ::= branchig"); }
+result ::= branchig AMPERSAND . { printf("\nresult ::= branchig AMPERSAND"); }
 
 //INPUT
 
@@ -71,6 +73,12 @@ command(cmd) ::= ARGUMENT(ptr) .	{
 	printf("\ncommand ::= ARGUMENT %s", ptr); 
 }
 
+command(cmd) ::= WORD(ptr) .	{ 
+	cmd = ptr; 
+	printf("\ncommand ::= WORD %s", cmd); 
+	strcpy(commandDescription->name, cmd); 
+}
+
 //REDIRECTION_LIST
 
 redirection_list ::= redirection . { printf("\nredirection_list ::= redirection"); }
@@ -82,6 +90,25 @@ redirection ::= GREAT argument . { printf("\nredirection ::= GREAT argument"); }
 redirection ::= LESS argument . { printf("\nredirection ::= LESS argument"); }
 redirection ::= GREATAMPERSAND argument . { printf("\nredirection ::= GREATAMPERSAND argument"); }
 redirection ::= GREATGREAT argument . { printf("\nredirection ::= GREATGREAT argument"); }
+
+///BRANCHING
+
+branchig ::= IF condition SEMICOLON THEN result ELSE result FI . { printf("\nbranchig ::= IF condition SEMICOLON THEN result ELSE result FI"); }
+branchig ::= IF condition SEMICOLON THEN COLON ELSE result FI . { printf("\nbranchig ::= IF condition SEMICOLON THEN COLON ELSE result FI"); }
+branchig ::= IF condition SEMICOLON THEN result ELSE COLON FI.	{ printf("\nbranchig ::= IF condition SEMICOLON THEN result ELSE COLON FI"); }
+
+//CONDITION
+
+condition ::= variable LESS value . { printf("\ncondition ::= variable LESS value"); }
+condition ::= variable GREAT value . { printf("\ncondition ::= variable GREAT value"); }
+
+//VARIABLE
+variable(var) ::= WORD(ptr) . { var = ptr; printf("\nvariable ::= WORD %s", var);}
+
+//VALUE
+
+value ::= DIGIT . { printf("\nvalue ::= DIGIT"); }
+value ::= WORD . { printf("\nvalue ::= WORD"); }
 
 //ARGLIST
 
@@ -112,6 +139,13 @@ argument(arg) ::= FLAG(ptr) . 		{
 argument(arg) ::= ARGUMENT(ptr) .	{ 
 	arg = ptr; 
 	printf("\nargument ::= ARGUMENT %s", arg);
+	strcpy(commandDescription->args[commandDescription->curAmountOfArgs], arg);
+	commandDescription->curAmountOfArgs = commandDescription->curAmountOfArgs + 1;
+}
+
+argument(arg) ::= WORD(ptr) .		{ 
+	arg = ptr; 
+	printf("\nargument ::= WORD %s", arg);
 	strcpy(commandDescription->args[commandDescription->curAmountOfArgs], arg);
 	commandDescription->curAmountOfArgs = commandDescription->curAmountOfArgs + 1;
 }
