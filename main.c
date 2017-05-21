@@ -21,17 +21,21 @@ void ParseTrace(FILE *, char *);
 int shell(char *commandLine)
 {
 	struct simpleCommand commandDescription = {0};
-	
+	int i;
 	//setup scanner
 	yyscan_t scanner;
     yylex_init(&scanner);
     YY_BUFFER_STATE bufferState = yy_scan_string(commandLine, scanner);
+	int lexCode;						//for returned lex code
  
     // Set up the parser
     void* shellParser = ParseAlloc(malloc);
+
+	//Data for debug
 	char zPrefix[] = "\nParser state: ";
 	char fileName[] = "./log.txt";
 	FILE *fileStream = fopen(fileName, "w");
+	//end Data for debug
 	
 	if (!fileStream)
 	{
@@ -39,26 +43,12 @@ int shell(char *commandLine)
 		return -1;
 	}
 	
-	ParseTrace(fileStream, zPrefix);
-
-    int lexCode;
-	
-	yylval.charValue = (char*)malloc(2);
-	printf("\nyylval.charValue: addres %d", yylval.charValue);
-	free(yylval.charValue);
-	yylval.charValue = (char*)malloc(2);
-		printf("\nyylval.charValue: addres %d", yylval.charValue);
-			free(yylval.charValue);
+	ParseTrace(fileStream, zPrefix);			//Start of debuging. Printing states of parser to file "log.txt"
   
     do {
         lexCode = yylex(scanner);
 		printf("\nLexCode: %d", lexCode);
-		printf("\nyylval.charValue: %s addres %d", yylval.charValue, &yylval.charValue);
-		/*if (!strcmp(yylval.charValue, "Quit"))
-		{
-			Parse(shellParser, 0, NULL, NULL);
-			break;
-		}*/
+		printf("\nyylval.charValue: %s ", yylval.charValue);
         Parse(shellParser, lexCode, yylval.charValue, &commandDescription);
     }
     while (lexCode > 0);
@@ -66,15 +56,15 @@ int shell(char *commandLine)
     if (-1 == lexCode) {
         perror ("\nThe scanner encountered an error."); 
     }
-	ParseTrace(NULL, zPrefix);
+	ParseTrace(NULL, zPrefix);					//end of debug. Printing states of parser
 	printf("\nCommand name: %s", commandDescription.name);
+	for (i = 0; i < commandDescription.curAmountOfArgs; i++)
+		printf("\nArg: %s", commandDescription.args[i]);
+	
     // Cleanup the scanner and parser
     yy_delete_buffer(bufferState, scanner);
-	printf("\n1");
     yylex_destroy(scanner);
-	printf("\n2");
     ParseFree(shellParser, free);
-	printf("\n3");
 	
 	fclose(fileStream);
 	

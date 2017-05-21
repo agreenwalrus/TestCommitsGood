@@ -1,7 +1,7 @@
 
 Parser state: Input FILENAME
 
-Parser state: Shift 10
+Parser state: Shift 11
 
 Parser state: Stack: FILENAME
 
@@ -15,7 +15,7 @@ Parser state: Stack: command
 
 Parser state: Reduce [command_line ::= command].
 
-Parser state: Shift 16
+Parser state: Shift 17
 
 Parser state: Stack: command_line
 
@@ -27,7 +27,7 @@ Parser state: Stack: command_line_list
 
 Parser state: Reduce [input ::= command_line_list].
 
-Parser state: Shift 24
+Parser state: Shift 25
 
 Parser state: Stack: input
 
