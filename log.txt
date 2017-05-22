@@ -15,7 +15,7 @@ Parser state: Stack: command
 
 Parser state: Reduce [command_line ::= command].
 
-Parser state: Shift 36
+Parser state: Shift 37
 
 Parser state: Stack: command_line
 
@@ -27,17 +27,17 @@ Parser state: Stack: command_line_list
 
 Parser state: Reduce [input ::= command_line_list].
 
-Parser state: Shift 45
+Parser state: Shift 46
 
 Parser state: Stack: input
 
 Parser state: Reduce [result ::= input].
 
-Parser state: Shift 77
+Parser state: Shift 78
 
 Parser state: Stack: result
 
-Parser state: Shift 76
+Parser state: Shift 77
 
 Parser state: Stack: result EOL
 

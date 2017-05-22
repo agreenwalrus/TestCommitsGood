@@ -161,6 +161,13 @@ argument(arg) ::= WORD(ptr) .		{
 	commandDescription->curAmountOfArgs = commandDescription->curAmountOfArgs + 1;
 }
 
+argument(arg) ::= DIGIT(ptr) .		{ 
+	arg = ptr; 
+	printf("\nargument ::= DIGIT %s", arg);
+	strcpy(commandDescription->args[commandDescription->curAmountOfArgs], arg);
+	commandDescription->curAmountOfArgs = commandDescription->curAmountOfArgs + 1;
+}
+
 //FOR_CYCLE
 
 for_cycle ::= FOR variable IN argument_list SEMICOLON DO result. { printf("\nfor_cycle ::= FOR variable IN argument_list SEMICOLON DO result"); } 

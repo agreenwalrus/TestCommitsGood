@@ -6,6 +6,7 @@
 #include "scanner.yy.h"
 #include "flexglobal.h"
 #include "simpleCommand.h"
+#include "shell_config.h"
 
 
 #define END_OF_SESSION 1
