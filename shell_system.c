@@ -1,8 +1,5 @@
 #include "shell_system.h"
 
-//Look at int reallocGlobalVariableArray()
-//mistake at realloc
-
 
 /*
 function for allocation mamory of shell_system arrays and other variables
@@ -30,15 +27,19 @@ realloc memory of global_variable_array
 
 int reallocGlobalVariableArray()
 {
+	int i;
 	struct variable_struct* temp;
 	
-	if(!(temp = (struct variable_struct*)realloc(global_variable_array, global_variable_array_size)))
+	if(!(temp = (struct variable_struct*)malloc((global_variable_array_size + START_SIZE) * sizeof(struct variable_struct))))
 	{
 		printf("\nError of reallocation in reallocGlobalVariableArray %d", GetLastError());
 		return -1;
 	}
-
-	global_variable_array = temp;
+	for(i = 0; i < global_variable_array_size; i++)
+		temp[i] = global_variable_array[i];
+	
+	free(global_variable_array);
+	global_variable_array = temp;	
 	global_variable_array_size += START_SIZE;
 
 	return 0;

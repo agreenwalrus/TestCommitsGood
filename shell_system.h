@@ -14,8 +14,6 @@ struct variable_struct* global_variable_array;
 int global_variable_array_size;
 int amount_of_global_variables;
 
-
-
 int initShell();							//init system variables of shell
 int reallocGlobalVariableArray();
 void destroyShell();
