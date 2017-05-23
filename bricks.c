@@ -123,6 +123,23 @@ void freeListStruct(struct list_struct st)
 		freeNodeStruct(*iter);
 		iter = iter->next;
 	}
+	if (st.redirection)
+	{
+		freeRedirecionStruct(*st.redirection);
+		free(st.redirection);
+	}
+}
+
+void freeRedirecionStruct(struct redirection_struct st)
+{
+	if (st.errorFile)
+		free(st.errorFile);
+	if(st.inputFile)
+		free(st.inputFile);
+	if(st.outputAtTheEndFile)
+		free(st.outputAtTheEndFile);
+	if(st.outputClearFile)
+		free(st.outputClearFile);
 }
 
 void addWholeCommandToList(struct list_struct* list, struct whole_command_struct* whole_command)

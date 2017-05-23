@@ -100,8 +100,6 @@ Here're described rules for scanning char buffers.
 
 <DOUBLE_QUOTED><<EOF>>  { return -1; }
 
-
-
 %%
 
 

@@ -25,6 +25,7 @@ struct for_cycle_struct;
 struct if_branch_struct;
 struct list_struct;
 struct node_struct;
+struct redirection_struct;
 
 void freeVariableStruct(struct variable_struct);
 void freeCommandStruct(struct command_struct);
@@ -35,15 +36,24 @@ void freeIfBranchStruct(struct if_branch_struct);
 void freeWholeCommandStruct(struct whole_command_struct);
 void freeNodeStruct(struct node_struct);
 void freeListStruct(struct list_struct);
+void freeRedirecionStruct(struct redirection_struct);
 
 void addWholeCommandToList(struct list_struct*, struct whole_command_struct*);
 
 
 ////////////////////////////////
 
+struct redirection_struct
+{
+	char *inputFile;
+	char *outputClearFile;
+	char *outputAtTheEndFile;
+	char *errorFile;
+};
+
 struct list_struct
 {
-	
+	struct redirection_struct *redirection;
 	struct node_struct *head;
 	struct node_struct *tail;
 };
@@ -65,7 +75,7 @@ struct operate_at_variabe_struct
 {
 	char *name;
 	unsigned char operation;	//bit
-								//0 ==, 1 !=, 2 -=, 3 +=, 4 ++, 5 =, 6 <, 7 >
+								//0 ==, 1 !=, 2 -=, 3 +=, 4 ++, 5--, 6 =, 7 <, 8 >
 	char *value;
 };
 
