@@ -87,7 +87,8 @@ int addVariable(struct variable_struct newVariable)
 		if (!strcmp(newVariable.varName, global_variable_array[i].varName))
 		{
 			freeMemoryForVariable(global_variable_array[i]);
-			global_variable_array[i] = newVariable;
+			global_variable_array[i].varName = newVariable.varName;
+			global_variable_array[i].varValue = newVariable.varValue;
 			break;
 		}
 	}

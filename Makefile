@@ -7,7 +7,7 @@ CFLAGS  = -g -Wall -pedantic
 all: shell
 	
 shell: main.o parser.o scanner.o shell_system.o bricks.o
-	$(CC) -o shell main.o parser.o scanner.o bricks.o
+	$(CC) -o shell main.o parser.o scanner.o bricks.o shell_system.o
 	
 main.o: main.c parser.h scanner.yy.h
 	$(CC) -c main.c 

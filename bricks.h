@@ -16,6 +16,27 @@ Struct for description of command
 #define OPER_AT_VAR_NAME "operate_at_var"
 #define IF_NAME "if"
 
+#define NEW_STDOUT_BACK 		0x01		// 0 >>, 1 >, 2 >&, 3 <
+#define NEW_STDOUT				0x02
+#define NEW_STDIN				0x08
+#define NEW_STDERR				0x04				
+
+#define	OPER_CMP_EQU			0x01		//0 ==, 1 !=, 2 -=, 3 +=, 4 ++, 5--, 6 =, 7 <, 8 >
+#define OPER_CMP_NOT_EQU		0x02
+#define OPER_MIN_EQU			0x04
+#define OPER_PLUS_EQU			0x08
+#define OPER_INCREM				0x10
+#define OPER_DECREM				0x20
+#define OPER_EQU				0x40
+#define OPER_LESS				0x80
+#define OPER_GRET				0x00
+
+#define CONNECT_NO				0x00		
+#define CONNECT_PIPE			0x01		//0 pipe, 1 semicolon, 2 andand, 3 ||
+#define CONNECT_SEMICOLON		0x02
+#define CONNECT_ANDAND			0x04
+#define CONNECT_OROR			0x08
+
 struct whole_command_struct;
 struct command_struct;
 struct variable_struct;
@@ -26,6 +47,7 @@ struct if_branch_struct;
 struct list_struct;
 struct node_struct;
 struct redirection_struct;
+struct part_redirection_struct;
 
 void freeVariableStruct(struct variable_struct);
 void freeCommandStruct(struct command_struct);
@@ -42,6 +64,11 @@ void addWholeCommandToList(struct list_struct*, struct whole_command_struct*);
 
 
 ////////////////////////////////
+struct part_redirection_struct
+{
+	unsigned char type; 	// 0 >>, 1 >, 2 >&, 3 <
+	char *fileName;
+};
 
 struct redirection_struct
 {
@@ -53,6 +80,7 @@ struct redirection_struct
 
 struct list_struct
 {
+	int size;
 	struct redirection_struct *redirection;
 	struct node_struct *head;
 	struct node_struct *tail;
@@ -60,8 +88,6 @@ struct list_struct
 
 struct command_struct {
 	char *name;
-	int maxLengthOfArgs;
-	int curLengthOfArgs;
 	char *args;
 };
 
@@ -104,6 +130,7 @@ struct if_branch_struct
 struct whole_command_struct
 {
 	char *name;
+	unsigned char connectionWithNextBitMask; //0 pipe, 1 semicolon, 2 andand, 3 ||
 	union {
 		struct command_struct *command;
 		struct operate_at_variabe_struct *operate_at_variable;
@@ -115,7 +142,6 @@ struct whole_command_struct
 
 struct node_struct
 {
-	unsigned char connectionWithNextBitMask; //0 pipe, 1 semicolon, 2 andand, 3 ||
 	struct whole_command_struct *toDo;
 	struct node_struct *next;
 	struct node_struct *prev;

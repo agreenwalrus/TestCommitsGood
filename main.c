@@ -5,9 +5,8 @@
 #include "parser.h"
 #include "scanner.yy.h"
 #include "flexglobal.h"
-#include "simpleCommand.h"
-#include "shell_config.h"
-
+#include "shell_system.h"
+#include "bricks.h"
 
 #define END_OF_SESSION 1
 
@@ -15,14 +14,14 @@
 #define BUF_SIZE 200
 
 void* ParseAlloc(void* (*allocProc)(size_t));
-void* Parse(void*, int, char*, struct simpleCommand*);
+void* Parse(void*, int, char*, struct list_struct*);
 void* ParseFree(void*, void(*freeProc)(void*));
 void ParseTrace(FILE *, char *);
 
 
 int shell(char *commandLine)
 {
-	struct simpleCommand commandDescription = {0};
+	struct list_struct list = {0};
 	int i;
 	//setup scanner
 	yyscan_t scanner;
@@ -51,27 +50,23 @@ int shell(char *commandLine)
         lexCode = yylex(scanner);
 		printf("\nLexCode: %d", lexCode);
 		printf("\nyylval.charValue: %s ", yylval.charValue);
-        Parse(shellParser, lexCode, yylval.charValue, &commandDescription);
+        Parse(shellParser, lexCode, yylval.charValue, &list);
     }
     while (lexCode > 0);
+	
+	freeListStruct(list);
  
     if (-1 == lexCode) {
         perror ("\nThe scanner encountered an error."); 
     }
 	ParseTrace(NULL, zPrefix);					//end of debug. Printing states of parser
-	printf("\nCommand name: %s", commandDescription.name);
-	for (i = 0; i < commandDescription.curAmountOfArgs; i++)
-		printf("\nArg: %s", commandDescription.args[i]);
-	
+
     // Cleanup the scanner and parser
     yy_delete_buffer(bufferState, scanner);
     yylex_destroy(scanner);
     ParseFree(shellParser, free);
 	
 	fclose(fileStream);
-	
-	if (!strcmp(commandDescription.name, "Quit") || !strcmp(commandDescription.name, "quit"))
-		return END_OF_SESSION;
 	
 	return 0;
 }
@@ -80,10 +75,16 @@ int main(int argc, char** argv) {
 	
 	char buffer[BUF_SIZE];
 	
+	initShell();	
+	
 	do {
 		printf("\n>");
 		fgets(buffer, BUF_SIZE, stdin);
+		if (!strcmp(buffer, "exit"))
+			break;
 	} while (! shell(buffer));
+	
+	destroyShell();
 	
 	return 0;
 }

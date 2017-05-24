@@ -45,30 +45,12 @@ Here're described rules for scanning char buffers.
 
 "|"                     { return PIPE; }
 "&"						{ return AMPERSAND; }
+"&&"					{ return ANDAND; }
+"||"					{ return OROR; }
+
 
 
 [ \t\r]                 { }
-
-"-"{1,2}[a-zA-Z]+		{ 
-	printf("\n\nscanner FLAG: %s", yytext); 
-	yylval.charValue = (char*)malloc(strlen(yytext) + 1);  
-	strcpy(yylval.charValue, yytext); 
-	return FLAG; 
-}	
-
-[a-zA-Z]+			{
-	printf("\n\nscanner WORD: %s", yytext); 
-	yylval.charValue = (char*)malloc(strlen(yytext) + 1); 
-	strcpy(yylval.charValue, yytext); 
-	return WORD;	
-}
-
--?[1-9][0-9]* {
-	printf("\n\nscanner DIGIT: %s", yytext); 
-	yylval.charValue = (char*)malloc(strlen(yytext) + 1);  
-	strcpy(yylval.charValue, yytext);	
-	return DIGIT; 
-}
 
 ([/a-zA-Z0-9_:\.\-]+("\\\ ")*("\\\"")*("\\\#")*("\\\'")*)+       { 
 	printf("\n\nscanner FILENAME: %s", yytext); 

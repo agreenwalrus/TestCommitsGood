@@ -168,4 +168,5 @@ void addWholeCommandToList(struct list_struct* list, struct whole_command_struct
 		node->prev = list->tail;
 		list->tail = node;
 	}
+	list->size = list->size + 1;
 }
