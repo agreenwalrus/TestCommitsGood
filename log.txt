@@ -1,60 +1,212 @@
 
 Parser state: Input IF
 
-Parser state: Shift 25
+Parser state: Shift 26
 
 Parser state: Stack: IF
 
 Parser state: Input LBRACKET
 
-Parser state: Shift 24
+Parser state: Shift 7
 
 Parser state: Stack: IF LBRACKET
 
 Parser state: Input FILENAME
 
-Parser state: Syntax Error!
+Parser state: Shift 31
+
+Parser state: Stack: IF LBRACKET FILENAME
 
 Parser state: Input LESS
 
-Parser state: Syntax Error!
+Parser state: Reduce [argument ::= FILENAME].
+
+Parser state: Shift 48
+
+Parser state: Stack: IF LBRACKET argument
+
+Parser state: Reduce [variable ::= argument].
+
+Parser state: Shift 50
+
+Parser state: Stack: IF LBRACKET variable
+
+Parser state: Shift 17
+
+Parser state: Stack: IF LBRACKET variable LESS
 
 Parser state: Input FILENAME
 
-Parser state: Syntax Error!
+Parser state: Shift 31
+
+Parser state: Stack: IF LBRACKET variable LESS FILENAME
 
 Parser state: Input RBRACKET
 
-Parser state: Syntax Error!
+Parser state: Reduce [argument ::= FILENAME].
+
+Parser state: Shift 66
+
+Parser state: Stack: IF LBRACKET variable LESS argument
+
+Parser state: Shift 63
+
+Parser state: Stack: IF LBRACKET variable LESS argument RBRACKET
 
 Parser state: Input THEN
 
-Parser state: Syntax Error!
+Parser state: Reduce [condition ::= LBRACKET variable LESS argument RBRACKET].
 
-Parser state: Input DO
+Parser state: Shift 72
 
-Parser state: Syntax Error!
+Parser state: Stack: IF condition
 
-Parser state: Input ELSE
+Parser state: Shift 4
 
-Parser state: Syntax Error!
+Parser state: Stack: IF condition THEN
 
 Parser state: Input FILENAME
 
-Parser state: Syntax Error!
+Parser state: Shift 33
+
+Parser state: Stack: IF condition THEN FILENAME
+
+Parser state: Input FILENAME
+
+Parser state: Reduce [command ::= FILENAME].
+
+Parser state: Shift 6
+
+Parser state: Stack: IF condition THEN command
+
+Parser state: Shift 31
+
+Parser state: Stack: IF condition THEN command FILENAME
+
+Parser state: Input ELSE
+
+Parser state: Reduce [argument ::= FILENAME].
+
+Parser state: Shift 34
+
+Parser state: Stack: IF condition THEN command argument
+
+Parser state: Reduce [argument_list ::= argument].
+
+Parser state: Shift 11
+
+Parser state: Stack: IF condition THEN command argument_list
+
+Parser state: Reduce [command_line ::= command argument_list].
+
+Parser state: Shift 38
+
+Parser state: Stack: IF condition THEN command_line
+
+Parser state: Reduce [command_line_list ::= command_line].
+
+Parser state: Shift 12
+
+Parser state: Stack: IF condition THEN command_line_list
+
+Parser state: Reduce [input ::= command_line_list].
+
+Parser state: Shift 49
+
+Parser state: Stack: IF condition THEN input
+
+Parser state: Reduce [result ::= input].
+
+Parser state: Shift 71
+
+Parser state: Stack: IF condition THEN result
+
+Parser state: Shift 3
+
+Parser state: Stack: IF condition THEN result ELSE
+
+Parser state: Input FILENAME
+
+Parser state: Shift 33
+
+Parser state: Stack: IF condition THEN result ELSE FILENAME
+
+Parser state: Input FILENAME
+
+Parser state: Reduce [command ::= FILENAME].
+
+Parser state: Shift 6
+
+Parser state: Stack: IF condition THEN result ELSE command
+
+Parser state: Shift 31
+
+Parser state: Stack: IF condition THEN result ELSE command FILENAME
+
+Parser state: Input FI
+
+Parser state: Reduce [argument ::= FILENAME].
+
+Parser state: Shift 34
+
+Parser state: Stack: IF condition THEN result ELSE command argument
+
+Parser state: Reduce [argument_list ::= argument].
+
+Parser state: Shift 11
+
+Parser state: Stack: IF condition THEN result ELSE command argument_list
+
+Parser state: Reduce [command_line ::= command argument_list].
+
+Parser state: Shift 38
+
+Parser state: Stack: IF condition THEN result ELSE command_line
+
+Parser state: Reduce [command_line_list ::= command_line].
+
+Parser state: Shift 12
+
+Parser state: Stack: IF condition THEN result ELSE command_line_list
+
+Parser state: Reduce [input ::= command_line_list].
+
+Parser state: Shift 49
+
+Parser state: Stack: IF condition THEN result ELSE input
+
+Parser state: Reduce [result ::= input].
+
+Parser state: Shift 70
+
+Parser state: Stack: IF condition THEN result ELSE result
+
+Parser state: Shift 53
+
+Parser state: Stack: IF condition THEN result ELSE result FI
 
 Parser state: Input EOL
 
-Parser state: Syntax Error!
+Parser state: Reduce [branchig ::= IF condition THEN result ELSE result FI].
+
+Parser state: Shift 59
+
+Parser state: Stack: branchig
+
+Parser state: Reduce [result ::= branchig].
+
+Parser state: Shift 81
+
+Parser state: Stack: result
+
+Parser state: Shift 80
+
+Parser state: Stack: result EOL
 
 Parser state: Input $
 
-Parser state: Syntax Error!
+Parser state: Reduce [program ::= result EOL].
 
-Parser state: Fail!
-
-Parser state: Popping LBRACKET
-
-Parser state: Popping IF
+Parser state: Accept!
 
 Parser state: Popping $

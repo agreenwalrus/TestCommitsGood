@@ -18,6 +18,7 @@ NULL - if not
 
 char* findVariable (char *varName)
 {
+	printf("\nfindVariable");
 	int i;
 	for (i = 0; i < amount_of_global_variables; i++)
 		if (!strcmp(varName, global_variable_array[i].varName))
@@ -106,6 +107,7 @@ add new variable to global_variable_array
 */
 int addVariable(struct variable_struct newVariable)
 {
+	printf("\naddVariable %s %s %d", newVariable.varName, newVariable.varValue, amount_of_global_variables);
 	int i;
 	if (amount_of_global_variables == global_variable_array_size)
 		if (reallocGlobalVariableArray())
@@ -117,7 +119,7 @@ int addVariable(struct variable_struct newVariable)
 			freeMemoryForVariable(global_variable_array[i]);
 			global_variable_array[i].varName = newVariable.varName;
 			global_variable_array[i].varValue = newVariable.varValue;
-			break;
+			return 0;
 		}
 	}
 	if (i == amount_of_global_variables)

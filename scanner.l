@@ -30,7 +30,7 @@ Here're described rules for scanning char buffers.
 
 "while"					{ return WHILE; }
 
-"&("					{ return ANDLPAREN; }
+"$("					{ return DOLLARLPAREN; }
 ")"						{ return RPAREN; }
 ";"						{ return SEMICOLON; }
 "="						{ return EQU; }

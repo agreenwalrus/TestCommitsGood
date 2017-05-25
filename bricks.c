@@ -2,6 +2,7 @@
 
 void freeVariableStruct(struct variable_struct st)
 {
+	printf ("\nfreeVariableStruct %s %s", st.varName, st.varValue);
 	if (st.varName)
 		free(st.varName);
 	if	(st.varValue)
@@ -10,6 +11,7 @@ void freeVariableStruct(struct variable_struct st)
 
 void freeCommandStruct(struct command_struct st)
 {
+	printf("\nfreeCommandStruct %s %s", st.nameOfCmd, st.args);
 	if(st.args)
 		free(st.args);
 	if(st.nameOfCmd)
@@ -18,6 +20,7 @@ void freeCommandStruct(struct command_struct st)
 
 void freeOperateAtVariableStruct(struct operate_at_variabe_struct st)
 {
+	printf("\nfreeOperateAtVariableStruct %s %s", st.name, st.value);
 	if(st.name)
 		free(st.name);
 	if(st.value)
@@ -27,6 +30,7 @@ void freeOperateAtVariableStruct(struct operate_at_variabe_struct st)
 
 void freeWhileCycleStruct(struct while_cycle_struct st)
 {
+	printf("\nfreeWhileCycleStruct ");
 	if (st.conditional)
 	{
 		freeOperateAtVariableStruct(*st.conditional);
@@ -41,6 +45,7 @@ void freeWhileCycleStruct(struct while_cycle_struct st)
 
 void freeForCycleStruct(struct for_cycle_struct st)
 {
+	printf("\nfreeForCycleStruct %s %s", st.varName, st.varStates);
 	if (st.varName)
 		free(st.varName);
 	if (st.varStates)
@@ -54,6 +59,7 @@ void freeForCycleStruct(struct for_cycle_struct st)
 
 void freeIfBranchStruct(struct if_branch_struct st)
 {
+	printf("\nfreeIfBranchStruct");
 	if (st.conditional)
 	{
 		freeOperateAtVariableStruct(*st.conditional);
@@ -73,6 +79,7 @@ void freeIfBranchStruct(struct if_branch_struct st)
 
 void freeWholeCommandStruct(struct whole_command_struct st)
 {
+	printf("\nfreeWholeCommandStruct %s", st.name);
 	if (st.name)
 	{
 		if (!strcmp(st.name, FOR_NAME))
@@ -108,7 +115,6 @@ void freeNodeStruct(struct node_struct st)
 		freeWholeCommandStruct(*st.toDo);
 		free(st.toDo);
 	}
-	printf("\nfreeNodeStruct");
 }
 
 void freeListStruct(struct list_struct st)
@@ -126,11 +132,11 @@ void freeListStruct(struct list_struct st)
 		freeRedirecionStruct(*st.redirection);
 		free(st.redirection);
 	}
-	printf("\nfreeListStruct");
 }
 
 void freeRedirecionStruct(struct redirection_struct st)
 {
+	printf("\nfreeRedirecionStruct");
 	if (st.errorFile)
 		free(st.errorFile);
 	if(st.inputFile)

@@ -41,7 +41,7 @@ int shell(char *commandLine)
 	
 	if (!fileStream)
 	{
-		printf("\nError of opening file %uh", GetLastError());
+		printf("\nError of opening log.txt file");
 		return -1;
 	}
 	
@@ -96,6 +96,8 @@ int main(int argc, char** argv) {
 	} while (! shell(buffer));
 	
 	destroyShell();
+	
+	getchar();
 	
 	return 0;
 }

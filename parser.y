@@ -12,6 +12,66 @@ Grammar rules for shell.
 	#include "shell_system.h"
 }
 
+%destructor result { if($$){
+	freeListStruct(*$$); 
+	free($$); 
+}}
+%destructor input { 
+	if($$){
+		freeListStruct(*$$); 
+		free($$); 
+}}
+%destructor command_line_list { 
+	if($$){
+		freeListStruct(*$$); 
+		free($$); 
+}}
+%destructor command_line { 
+	if($$){
+		freeCommandStruct(*$$);
+		free($$);	
+}}
+%destructor command { 
+	if($$){
+		freeCommandStruct(*$$);
+		free($$);	
+}}
+%destructor redirection_list { 
+	if($$) {
+		freeRedirecionStruct(*$$);
+		free($$); 
+	}}
+%destructor redirection { if($$) free($$); }
+%destructor argument_list { if($$) free($$); }
+%destructor argument { if($$) free($$); }
+%destructor substitution_of_var { if($$) free($$); }
+%destructor value { if($$) free($$); }
+%destructor for_cycle { 
+	if($$) {
+		freeForCycleStruct(*$$);
+		free($$);
+	}		
+}
+%destructor while_cycle { 
+	if($$) {
+		freeWhileCycleStruct(*$$);
+		free($$);
+	}		
+}
+%destructor variable { if($$) free($$); }
+%destructor condition  { 
+	if($$) {
+		freeOperateAtVariableStruct(*$$);
+		free($$);
+	}		
+}
+%destructor branchig  { 
+	if($$) {
+		freeIfBranchStruct(*$$);
+		free($$);
+	}		
+}
+
 
 %left ANDAND .
 %left OROR .
@@ -43,21 +103,22 @@ Grammar rules for shell.
 }  
 
 %parse_failure {
-	printf("\nparse failure");
+	printf("\nParse failure!");
 }
 
 %parse_accept {
-	printf("\nParsing's been done");
+	printf("\nParsing's been done!");
 }
 
 %stack_overflow {
-	printf("\nParser stack overflow\n");
+	printf("\nParser stack overflow!");
 }
 
 %start_symbol program
 
 program ::= result(res) EOL. { 
-	*list_for_return = res; 
+	*list_for_return = res;
+	res = NULL;
 }
 
 //RESULT
@@ -71,12 +132,13 @@ result(res) ::= input(inp) . {
 		printf("\nNULL list result");  
 	res = inp;
 	res->excecAtBackGr = FALSE;	
-	printf("\n cmd: %s %s", res->head->toDo->cmd.command->nameOfCmd, res->head->toDo->cmd.command->args);
+	inp = NULL;
 }
 
 result(res) ::= input(inp) AMPERSAND. {
 	res = inp;
-	res->excecAtBackGr = TRUE;	
+	res->excecAtBackGr = TRUE;
+	inp = NULL;
 }
 
 
@@ -93,6 +155,8 @@ result(res) ::= branchig(branch) . {
 	whole_cmd->cmd.if_branch = branch;
 	whole_cmd->connectionWithNextBitMask = CONNECT_NO;
 	addWholeCommandToList(res, whole_cmd);
+	
+	branch = NULL;
 }
 
 result(res) ::= variable_declaration . { 
@@ -111,6 +175,8 @@ result(res) ::= for_cycle(cycle) . {
 	whole_cmd->cmd.for_cycle = cycle;
 	whole_cmd->connectionWithNextBitMask = CONNECT_NO;
 	addWholeCommandToList(res, whole_cmd);
+	
+	cycle = NULL;
 }
 
 result(res) ::= while_cycle(cycle) . {
@@ -125,6 +191,7 @@ result(res) ::= while_cycle(cycle) . {
 	whole_cmd->cmd.while_cycle = cycle;
 	whole_cmd->connectionWithNextBitMask = CONNECT_NO;
 	addWholeCommandToList(res, whole_cmd);
+	cycle = NULL;
 }
 
 //FOR_CYCLE
@@ -140,6 +207,8 @@ for_cycle(cycle) ::= FOR variable(var) IN_TOKEN argument_list(arg_list) SEMICOLO
 	cycle->varName = var;
 	cycle->varStates = arg_list;
 	cycle->instractionsToDo = res;
+	
+	var = arg_list = res = NULL;
 } 
 
 //WHILE_CYCLE
@@ -148,6 +217,7 @@ while_cycle(while_cycle) ::= WHILE condition(cond) SEMICOLON DO result(res) . {
 	while_cycle = (struct while_cycle_struct*) malloc (sizeof(struct while_cycle_struct));
 	while_cycle->conditional = cond;
 	while_cycle->instractionsToDo = res;
+	cond = res = NULL;
 }
 
 //INPUT
@@ -155,17 +225,21 @@ while_cycle(while_cycle) ::= WHILE condition(cond) SEMICOLON DO result(res) . {
 input(inp) ::= command_line_list(cmd_line_list) . {
 	inp = cmd_line_list;
 	cmd_line_list->redirection = NULL;
+	cmd_line_list = NULL;
 }
 
 input(inp) ::= command_line_list(cmd_line_list) redirection_list(red_list) . {
 	cmd_line_list->redirection = red_list;
 	inp = red_list;
+	cmd_line_list = red_list = NULL;
 }
 
 //SUBSTITUTION_OF_VARIABLE
 
-substitution_of_var(subs) ::= ANDLPAREN FILENAME(ptr) RPAREN .{
+substitution_of_var(subs) ::= DOLLARLPAREN FILENAME(ptr) RPAREN .{
 	subs = ptr;
+	
+	ptr = NULL;
 }
 
 
@@ -184,6 +258,8 @@ command_line_list(cmd_line_list) ::= command_line(cmd_line) . {
 	cmd_line_list->size = 0;
 	
 	addWholeCommandToList(cmd_line_list, whole_cmd);
+	
+	cmd_line = NULL;
 }
 
 command_line_list(res_cmd_line_list) ::= command_line_list(cmd_line_list) PIPE command_line(cmd_line) . {
@@ -196,6 +272,8 @@ command_line_list(res_cmd_line_list) ::= command_line_list(cmd_line_list) PIPE c
 	
 	addWholeCommandToList(cmd_line_list, whole_cmd);
 	res_cmd_line_list = cmd_line_list;
+	cmd_line_list = NULL;
+	cmd_line = NULL;
 }
 
 command_line_list(res_cmd_line_list) ::= command_line_list(cmd_line_list) ANDAND command_line(cmd_line) . {
@@ -209,6 +287,8 @@ command_line_list(res_cmd_line_list) ::= command_line_list(cmd_line_list) ANDAND
 	addWholeCommandToList(cmd_line_list, whole_cmd);
 	
 	res_cmd_line_list = cmd_line_list;
+	cmd_line_list = NULL;
+	cmd_line = NULL;
 }
 
 command_line_list(res_cmd_line_list) ::= command_line_list(cmd_line_list) OROR command_line(cmd_line) . {
@@ -222,17 +302,21 @@ command_line_list(res_cmd_line_list) ::= command_line_list(cmd_line_list) OROR c
 	addWholeCommandToList(cmd_line_list, whole_cmd);
 
 	res_cmd_line_list = cmd_line_list;
+	cmd_line_list = NULL;
+	cmd_line = NULL;
 }
  
 //CMDLIST
 
 command_line(cmd_line) ::= command(cmd) . {
 	cmd_line = cmd;
+	cmd = NULL;
 }
 
 command_line(cmd_line) ::= command(cmd) argument_list(arg_list) . { 
 	cmd->args = arg_list;
 	cmd_line = cmd;
+	cmd = arg_list = NULL;
 }
  
 //CMD
@@ -240,12 +324,14 @@ command(cmd) ::= FILENAME(name) .	{
 	cmd = (struct command_struct*) malloc(sizeof(struct command_struct));
 	cmd->nameOfCmd = name;
 	cmd->args = NULL;
+	name = NULL;
 }
 
 command(cmd) ::= ARGUMENT(name) .	{
 	cmd = (struct command_struct*) malloc(sizeof(struct command_struct));
 	cmd->nameOfCmd = name;
 	cmd->args = NULL;
+	name = NULL;
 }
 
 //VARIABLE_DECLARATION
@@ -254,7 +340,9 @@ variable_declaration ::= variable(name) EQU argument_list(arg_list) . {
 	struct variable_struct var;
 	var.varName = name;
 	var.varValue = arg_list;
-	addVariable(var);	
+	addVariable(var);
+	name = NULL;
+	arg_list = NULL;
 }
 
 
@@ -274,7 +362,6 @@ redirection_list(redir_list) ::= redirection(redir) . {
 		redir_list->inputFile = redir->fileName;
 	else if (redir->type == NEW_STDERR)
 		redir_list->errorFile = redir->fileName;
-	free(redir); 
 }
 
 redirection_list(result_redir_list) ::= redirection_list(redir_list) redirection(redir) . {
@@ -285,9 +372,9 @@ redirection_list(result_redir_list) ::= redirection_list(redir_list) redirection
 	else if (redir->type == NEW_STDIN)
 		redir_list->inputFile = redir->fileName;
 	else if (redir->type == NEW_STDERR)
-		redir_list->errorFile = redir->fileName;
-	free(redir); 
+		redir_list->errorFile = redir->fileName; 
 	result_redir_list = redir_list;
+	redir_list = NULL;
 }
 
 //REDIRECTION
@@ -295,25 +382,29 @@ redirection_list(result_redir_list) ::= redirection_list(redir_list) redirection
 redirection(redir) ::= GREAT argument(arg) . {
 	redir = (struct part_redirection_struct*) malloc (sizeof(struct part_redirection_struct));
 	redir->fileName = arg;
-	redir->type = NEW_STDOUT;	
+	redir->type = NEW_STDOUT;
+	arg = NULL;
 }
 
 redirection(redir) ::= LESS argument(arg) . {
 	redir = (struct part_redirection_struct*) malloc (sizeof(struct part_redirection_struct));
 	redir->fileName = arg;
 	redir->type = NEW_STDIN;	
+	arg = NULL;
 }
 
 redirection(redir) ::= GREATAMPERSAND argument(arg) . {
 	redir = (struct part_redirection_struct*) malloc (sizeof(struct part_redirection_struct));
 	redir->fileName = arg;
-	redir->type = NEW_STDERR; 
+	redir->type = NEW_STDERR;
+	arg = NULL;
 }
 
 redirection(redir) ::= GREATGREAT argument(arg) . {
 	redir = (struct part_redirection_struct*) malloc (sizeof(struct part_redirection_struct));
 	redir->fileName = arg;
 	redir->type = NEW_STDOUT_BACK;
+	arg = NULL;
 }
 
 //BRANCHING
@@ -323,6 +414,9 @@ branchig(branch) ::= IF condition(cond) THEN result(trueRes) ELSE result(falseRe
 	branch->conditional = cond;
 	branch->trueWay = trueRes;
 	branch->falseWay = falseRes;
+	trueRes = NULL;
+	falseRes = NULL;
+	cond = NULL;
 }
 
 branchig(branch) ::= IF condition(cond) THEN COLON ELSE result(res) FI . {
@@ -330,6 +424,8 @@ branchig(branch) ::= IF condition(cond) THEN COLON ELSE result(res) FI . {
 	branch->conditional = cond;
 	branch->trueWay = NULL;
 	branch->falseWay = res;
+	res = NULL;
+	res = NULL;
 }
 
 branchig(branch) ::= IF condition(cond) THEN result(res) ELSE COLON FI.	{
@@ -337,6 +433,8 @@ branchig(branch) ::= IF condition(cond) THEN result(res) ELSE COLON FI.	{
 	branch->conditional = cond;
 	branch->trueWay = res;
 	branch->falseWay = NULL;
+	res = NULL;
+	res = NULL;
 }
 
 //CONDITION
@@ -345,7 +443,9 @@ condition(cond) ::= LBRACKET variable(var) LESS argument(arg) RBRACKET . {
 	cond = (struct operate_at_variabe_struct*) malloc (sizeof(struct operate_at_variabe_struct));
 	cond->name = var;
 	cond->value = arg;
-	cond->operation = OPER_LESS;	
+	cond->operation = OPER_LESS;
+	var = NULL;
+	arg = NULL;
 }
 
 condition(cond) ::= LBRACKET variable(var) GREAT argument(arg) RBRACKET . {
@@ -353,6 +453,8 @@ condition(cond) ::= LBRACKET variable(var) GREAT argument(arg) RBRACKET . {
 	cond->name = var;
 	cond->value = arg;
 	cond->operation = OPER_GRET;
+	var = NULL;
+	arg = NULL;
 }
 
 condition(cond) ::= LBRACKET variable(var) EQUEQU argument(arg) RBRACKET . { 
@@ -360,17 +462,21 @@ condition(cond) ::= LBRACKET variable(var) EQUEQU argument(arg) RBRACKET . {
 	cond->name = var;
 	cond->value = arg;
 	cond->operation = OPER_CMP_EQU;
+	var = NULL;
+	arg = NULL;
 }
 
 //VARIABLE
-variable(var) ::= WORD(ptr) . { 
-	var = ptr; 
+variable(var) ::= argument(ptr) . { 
+	var = ptr;
+	ptr = NULL;	
 }
 
 //ARGLIST
 
 argument_list(arg_list) ::= argument(arg) . {
-	arg_list = arg; 
+	arg_list = arg;
+	arg = NULL;
 }
 
 argument_list(new_arg_list) ::= argument_list(arg_list) argument(arg) . {
@@ -378,23 +484,22 @@ argument_list(new_arg_list) ::= argument_list(arg_list) argument(arg) . {
 	stpcpy(new_arg_list, arg_list);
 	strcat(new_arg_list, " \0");
 	strcat(new_arg_list, arg);
-	free(arg_list);
-	free(arg);
 }
 
 //ARG
 
 argument(arg) ::= FILENAME(ptr) .	{ 
 	arg = ptr;
+	ptr = NULL;
 }
 
 argument(arg) ::= ARGUMENT(ptr) .	{ 
-	arg = ptr; 
+	arg = ptr;
+	ptr = NULL;
 }
 
 argument (arg) ::= substitution_of_var(subs) . {
 	arg = findVariable (subs);
-	free(subs);
 }
 
 
