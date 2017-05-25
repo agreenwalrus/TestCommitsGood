@@ -7,6 +7,8 @@ Here're described rules for scanning char buffers.
 	#include <string.h>
 	#include <stdlib.h>
 	#include <string.h>
+	#define LS_CHANGE "dir"
+	#define GREP_CHANGE "findstr"
 %}
 
 %option reentrant
@@ -20,6 +22,8 @@ Here're described rules for scanning char buffers.
 
 %%
 
+"ls"					{ yylval.charValue = strdup(LS_CHANGE); return FILENAME;  }
+"grep"					{ yylval.charValue = strdup(GREP_CHANGE); return FILENAME; }
 
 "if"					{ return IF; }
 "then"					{ return THEN; }
@@ -56,16 +60,13 @@ Here're described rules for scanning char buffers.
 [ \t\r]                 { }
 
 ([/a-zA-Z0-9_:\.\-]+("\\\ ")*("\\\"")*("\\\#")*("\\\'")*)+       { 
-	printf("\n\nscanner FILENAME: %s", yytext); 
-	yylval.charValue = (char*)malloc(strlen(yytext) + 1); 
-	strcpy(yylval.charValue, yytext); 
+	yylval.charValue = strdup(yytext);
 	return FILENAME; 
 }	
 
 [']                     { BEGIN(SINGLE_QUOTED); }
 <SINGLE_QUOTED>[^']+    { 
-	yylval.charValue = (char*)malloc(strlen(yytext) + 1);
-	strcpy(yylval.charValue, yytext);
+	yylval.charValue = strdup(yytext);
 }
 <SINGLE_QUOTED>[']      { 
 	BEGIN(INITIAL);  
