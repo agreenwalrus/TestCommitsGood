@@ -1,6 +1,14 @@
 #include "shell_system.h"
 
 
+struct variable_struct* global_variable_array;
+int global_variable_array_size;
+int amount_of_global_variables;
+char ** system_commands_shell = {
+	"cd",
+	"pwd"
+};
+
 /*
 function for allocation mamory of shell_system arrays and other variables
 
@@ -8,6 +16,9 @@ returns:
 	0 if successful
 	-1 if errors
 */
+
+
+
 int initShell()
 {
 	if (!(global_variable_array = (struct variable_struct*)(malloc(START_SIZE * sizeof(struct variable_struct)))))

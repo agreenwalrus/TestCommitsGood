@@ -9,6 +9,7 @@
 #include "bricks.h"
 
 #define END_OF_SESSION 1
+#define EXIT "exit\n"
 
 
 #define BUF_SIZE 200
@@ -80,7 +81,8 @@ int main(int argc, char** argv) {
 	do {
 		printf("\n>");
 		fgets(buffer, BUF_SIZE, stdin);
-		if (!strcmp(buffer, "exit"))
+		printf("\nbuf: %s", buffer);
+		if (strcmp(buffer, EXIT) == 0)
 			break;
 	} while (! shell(buffer));
 	

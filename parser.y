@@ -30,6 +30,7 @@ Grammar rules for shell.
 %type redirection { struct part_redirection_struct* }
 %type argument_list { char* }
 %type argument { char* }
+%type substitution_of_var { char * }
 %type value { char* }
 %type for_cycle { struct for_cycle_struct* }
 %type while_cycle { struct while_cycle_struct* }
@@ -93,6 +94,13 @@ input(inp) ::= command_line_list(cmd_line_list) redirection_list(red_list) . {
 	red_list;
 }
 
+//SUBSTITUTION_OF_VARIABLE
+
+substitution_of_var(subs) ::= ANDLPAREN FILENAME(ptr) RPAREN .{
+	//find var at global_var_array
+	subs = ptr;
+}
+
 
 //CMDLINELIST
 
@@ -108,7 +116,7 @@ command_line_list(cmd_line_list) ::= command_line(cmd_line) . {
 	cmd_line_list->tail = NULL;
 	cmd_line_list->size = 0;
 	
-	addWholeCommandToList(cmd_line_list, whole_cmd);	
+	addWholeCommandToList(cmd_line_list, whole_cmd);
 }
 
 command_line_list(res_cmd_line_list) ::= command_line_list(cmd_line_list) PIPE command_line(cmd_line) . {
@@ -163,12 +171,12 @@ command_line(cmd_line) ::= command(cmd) argument_list(arg_list) . {
 //CMD
 command(cmd) ::= FILENAME(name) .	{ 
 	cmd = (struct command_struct*) malloc(sizeof(struct command_struct));
-	cmd->name = name;
+	cmd->nameOfCmd = name;
 	cmd->args = NULL;
 }
 command(cmd) ::= ARGUMENT(name) .	{
 	cmd = (struct command_struct*) malloc(sizeof(struct command_struct));
-	cmd->name = name;
+	cmd->nameOfCmd = name;
 	cmd->args = NULL;
 }
 
@@ -328,6 +336,11 @@ argument(arg) ::= FILENAME(ptr) .	{
 argument(arg) ::= ARGUMENT(ptr) .	{ 
 	arg = ptr; 
 	printf("\nargument ::= ARGUMENT %s", arg);
+}
+
+argument (arg) ::= substitution_of_var(subs) . {
+	//find var at global_var_array
+	arg = subs;
 }
 
 

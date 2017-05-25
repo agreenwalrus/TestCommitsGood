@@ -12,8 +12,8 @@ void freeCommandStruct(struct command_struct st)
 {
 	if(st.args)
 		free(st.args);
-	if(st.name)
-		free(st.name);
+	if(st.nameOfCmd)
+		free(st.nameOfCmd);
 }
 
 void freeOperateAtVariableStruct(struct operate_at_variabe_struct st)

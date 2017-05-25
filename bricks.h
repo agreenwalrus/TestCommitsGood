@@ -87,7 +87,7 @@ struct list_struct
 };
 
 struct command_struct {
-	char *name;
+	char *nameOfCmd;
 	char *args;
 };
 
