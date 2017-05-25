@@ -9,6 +9,8 @@ Here're described rules for scanning char buffers.
 	#include <string.h>
 	#define LS_CHANGE "dir"
 	#define GREP_CHANGE "findstr"
+	#define PS_CHANGE "tasklist"
+	#define KILL_CHANGE "taskkill"
 %}
 
 %option reentrant
@@ -24,6 +26,8 @@ Here're described rules for scanning char buffers.
 
 "ls"					{ yylval.charValue = strdup(LS_CHANGE); return FILENAME;  }
 "grep"					{ yylval.charValue = strdup(GREP_CHANGE); return FILENAME; }
+"ps"					{ yylval.charValue = strdup(PS_CHANGE); return FILENAME; }
+"kill"					{ yylval.charValue = strdup(KILL_CHANGE); return FILENAME; }	
 
 "if"					{ return IF; }
 "then"					{ return THEN; }
