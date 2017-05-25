@@ -26,7 +26,7 @@ Here're described rules for scanning char buffers.
 
 "for"					{ return FOR; }
 "do"					{ return DO; }
-"in"					{ return IN; }
+"in"					{ return IN_TOKEN; }
 
 "while"					{ return WHILE; }
 

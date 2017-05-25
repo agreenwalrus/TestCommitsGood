@@ -1,68 +1,60 @@
 
+Parser state: Input IF
+
+Parser state: Shift 25
+
+Parser state: Stack: IF
+
+Parser state: Input LBRACKET
+
+Parser state: Shift 24
+
+Parser state: Stack: IF LBRACKET
+
 Parser state: Input FILENAME
 
-Parser state: Shift 35
+Parser state: Syntax Error!
 
-Parser state: Stack: FILENAME
+Parser state: Input LESS
+
+Parser state: Syntax Error!
 
 Parser state: Input FILENAME
 
-Parser state: Reduce [command ::= FILENAME].
+Parser state: Syntax Error!
 
-Parser state: Shift 6
+Parser state: Input RBRACKET
 
-Parser state: Stack: command
+Parser state: Syntax Error!
 
-Parser state: Shift 30
+Parser state: Input THEN
 
-Parser state: Stack: command FILENAME
+Parser state: Syntax Error!
+
+Parser state: Input DO
+
+Parser state: Syntax Error!
+
+Parser state: Input ELSE
+
+Parser state: Syntax Error!
+
+Parser state: Input FILENAME
+
+Parser state: Syntax Error!
 
 Parser state: Input EOL
 
-Parser state: Reduce [argument ::= FILENAME].
-
-Parser state: Shift 32
-
-Parser state: Stack: command argument
-
-Parser state: Reduce [argument_list ::= argument].
-
-Parser state: Shift 9
-
-Parser state: Stack: command argument_list
-
-Parser state: Reduce [command_line ::= command argument_list].
-
-Parser state: Shift 36
-
-Parser state: Stack: command_line
-
-Parser state: Reduce [command_line_list ::= command_line].
-
-Parser state: Shift 10
-
-Parser state: Stack: command_line_list
-
-Parser state: Reduce [input ::= command_line_list].
-
-Parser state: Shift 47
-
-Parser state: Stack: input
-
-Parser state: Reduce [result ::= input].
-
-Parser state: Shift 79
-
-Parser state: Stack: result
-
-Parser state: Shift 78
-
-Parser state: Stack: result EOL
+Parser state: Syntax Error!
 
 Parser state: Input $
 
-Parser state: Reduce [program ::= result EOL].
+Parser state: Syntax Error!
 
-Parser state: Accept!
+Parser state: Fail!
+
+Parser state: Popping LBRACKET
+
+Parser state: Popping IF
 
 Parser state: Popping $

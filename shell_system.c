@@ -4,10 +4,27 @@
 struct variable_struct* global_variable_array;
 int global_variable_array_size;
 int amount_of_global_variables;
-char ** system_commands_shell = {
+char *system_commands_shell[] = {
 	"cd",
 	"pwd"
 };
+
+/*
+It gets the name of var. Search through global_variable_array.
+Returns:
+value(char*) - of variable if exist
+NULL - if not
+*/
+
+char* findVariable (char *varName)
+{
+	int i;
+	for (i = 0; i < amount_of_global_variables; i++)
+		if (!strcmp(varName, global_variable_array[i].varName))
+			if (global_variable_array[i].varValue)
+				return strdup(global_variable_array[i].varValue);
+	return NULL;
+}
 
 /*
 function for allocation mamory of shell_system arrays and other variables
@@ -23,7 +40,7 @@ int initShell()
 {
 	if (!(global_variable_array = (struct variable_struct*)(malloc(START_SIZE * sizeof(struct variable_struct)))))
 	{
-		printf("\nError of initialisation shell %d", GetLastError());
+		printf("\nError of initialisation shell");
 		return -1;
 	}
 	global_variable_array_size = START_SIZE;
@@ -43,7 +60,7 @@ int reallocGlobalVariableArray()
 	
 	if(!(temp = (struct variable_struct*)malloc((global_variable_array_size + START_SIZE) * sizeof(struct variable_struct))))
 	{
-		printf("\nError of reallocation in reallocGlobalVariableArray %d", GetLastError());
+		printf("\nError of reallocation in reallocGlobalVariableArray");
 		return -1;
 	}
 	for(i = 0; i < global_variable_array_size; i++)

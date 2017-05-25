@@ -15,6 +15,7 @@ int reallocGlobalVariableArray();
 void destroyShell();
 void freeMemoryForVariable(struct variable_struct);
 int addVariable(struct variable_struct);
+char* findVariable (char *);
 
 
 #endif

@@ -41,15 +41,10 @@ void freeWhileCycleStruct(struct while_cycle_struct st)
 
 void freeForCycleStruct(struct for_cycle_struct st)
 {
-	int i;
 	if (st.varName)
 		free(st.varName);
 	if (st.varStates)
-	{
-		for (i = 0; i < st.currentAmountOfStates; i++)
-			free(st.varStates[i]);
 		free(st.varStates);
-	}
 	if (st.instractionsToDo)
 	{
 		freeListStruct(*st.instractionsToDo);
@@ -107,17 +102,20 @@ void freeWholeCommandStruct(struct whole_command_struct st)
 
 void freeNodeStruct(struct node_struct st)
 {
+	printf("\nfreeNodeStruct");
 	if (st.toDo)
 	{
 		freeWholeCommandStruct(*st.toDo);
 		free(st.toDo);
 	}
+	printf("\nfreeNodeStruct");
 }
 
 void freeListStruct(struct list_struct st)
 {
 	struct node_struct *iter;
 	iter = st.head;	
+	printf("\nfreeListStruct");
 	while (iter)
 	{
 		freeNodeStruct(*iter);
@@ -128,6 +126,7 @@ void freeListStruct(struct list_struct st)
 		freeRedirecionStruct(*st.redirection);
 		free(st.redirection);
 	}
+	printf("\nfreeListStruct");
 }
 
 void freeRedirecionStruct(struct redirection_struct st)

@@ -10,11 +10,15 @@ Struct for description of command
 #include <string.h>
 #include <stdio.h>
 
-#define FOR_NAME "for"
-#define WHILE_NAME "while"
-#define CMD_NAME "cammand"
-#define OPER_AT_VAR_NAME "operate_at_var"
-#define IF_NAME "if"
+typedef int BOOL;
+#define TRUE 1
+#define FALSE 0
+
+#define FOR_NAME 				"for"
+#define WHILE_NAME 				"while"
+#define CMD_NAME 				"cammand"
+#define OPER_AT_VAR_NAME 		"operate_at_var"
+#define IF_NAME 				"if"
 
 #define NEW_STDOUT_BACK 		0x01		// 0 >>, 1 >, 2 >&, 3 <
 #define NEW_STDOUT				0x02
@@ -84,6 +88,7 @@ struct list_struct
 	struct redirection_struct *redirection;
 	struct node_struct *head;
 	struct node_struct *tail;
+	BOOL excecAtBackGr;
 };
 
 struct command_struct {
@@ -114,9 +119,7 @@ struct while_cycle_struct
 struct for_cycle_struct
 {
 	char *varName;
-	int maxAmountOfStates;
-	int currentAmountOfStates;
-	char **varStates;
+	char *varStates;
 	struct list_struct *instractionsToDo;
 };
 
@@ -146,8 +149,6 @@ struct node_struct
 	struct node_struct *next;
 	struct node_struct *prev;
 };
-
-
 
 
 #endif

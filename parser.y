@@ -17,7 +17,7 @@ Grammar rules for shell.
 %left OROR .
 %right PIPE .
 
-%extra_argument { struct list_struct *list }
+%extra_argument { struct list_struct **list_for_return }
 
 %default_type {char *}
 %token_type {char *}
@@ -56,48 +56,115 @@ Grammar rules for shell.
 
 %start_symbol program
 
-program ::= result(res) EOL. { list = res; }
+program ::= result(res) EOL. { 
+	*list_for_return = res; 
+}
 
 //RESULT
 
-result ::= .	{ printf("\nresult ::= ."); }
-result ::= input . { printf("\nresult ::= input"); }
-result ::= input AMPERSAND. { printf("\nresult ::= input AMPERSAND"); }
-result ::= branchig . { printf("\nresult ::= branchig"); }
-//result ::= branchig AMPERSAND . { printf("\nresult ::= branchig AMPERSAND"); }
-result ::= variable_declaration . { printf("\nresult ::= variable_declaration"); }
-result ::= for_cycle . { printf("\nresult ::= for_cycle"); }
-result ::= while_cycle . { printf("\nresult ::= while_cycle"); }
+result(res) ::= .	{  
+	res = NULL;
+}
 
+result(res) ::= input(inp) . { 	
+	if(!inp)
+		printf("\nNULL list result");  
+	res = inp;
+	res->excecAtBackGr = FALSE;	
+	printf("\n cmd: %s %s", res->head->toDo->cmd.command->nameOfCmd, res->head->toDo->cmd.command->args);
+}
+
+result(res) ::= input(inp) AMPERSAND. {
+	res = inp;
+	res->excecAtBackGr = TRUE;	
+}
+
+
+result(res) ::= branchig(branch) . {
+	res = (struct list_struct*) malloc (sizeof(struct list_struct));
+	res->redirection = NULL;
+	res->head = NULL;
+	res->tail = NULL;
+	res->size = 0;
+	
+	
+	struct whole_command_struct* whole_cmd = (struct whole_command_struct*) malloc (sizeof(struct whole_command_struct));
+	whole_cmd->name = strdup(IF_NAME);
+	whole_cmd->cmd.if_branch = branch;
+	whole_cmd->connectionWithNextBitMask = CONNECT_NO;
+	addWholeCommandToList(res, whole_cmd);
+}
+
+result(res) ::= variable_declaration . { 
+	res = NULL;
+}
+
+result(res) ::= for_cycle(cycle) . { 
+	res = (struct list_struct*) malloc (sizeof(struct list_struct));
+	res->redirection = NULL;
+	res->head = NULL;
+	res->tail = NULL;
+	res->size = 0;
+	
+	struct whole_command_struct* whole_cmd = (struct whole_command_struct*) malloc (sizeof(struct whole_command_struct));
+	whole_cmd->name = strdup(FOR_NAME);
+	whole_cmd->cmd.for_cycle = cycle;
+	whole_cmd->connectionWithNextBitMask = CONNECT_NO;
+	addWholeCommandToList(res, whole_cmd);
+}
+
+result(res) ::= while_cycle(cycle) . {
+	res = (struct list_struct*) malloc (sizeof(struct list_struct));
+	struct whole_command_struct* whole_cmd = (struct whole_command_struct*) malloc (sizeof(struct whole_command_struct));
+	res->redirection = NULL;
+	res->head = NULL;
+	res->tail = NULL;
+	res->size = 0;
+	
+	whole_cmd->name = strdup(WHILE_NAME);
+	whole_cmd->cmd.while_cycle = cycle;
+	whole_cmd->connectionWithNextBitMask = CONNECT_NO;
+	addWholeCommandToList(res, whole_cmd);
+}
 
 //FOR_CYCLE
 
-for_cycle ::= FOR variable IN argument_list SEMICOLON DO result. { 
-	printf("\nfor_cycle ::= FOR variable IN argument_list SEMICOLON DO result"); 
+for_cycle(cycle) ::= FOR variable(var) IN_TOKEN argument_list(arg_list) SEMICOLON DO result(res). {
+	struct variable_struct st;
+	st.varName = strdup(var);
+	st.varValue = NULL;
+	addVariable(st);
+	
+	cycle = (struct for_cycle_struct*) malloc (sizeof(struct for_cycle_struct));
+	
+	cycle->varName = var;
+	cycle->varStates = arg_list;
+	cycle->instractionsToDo = res;
 } 
 
 //WHILE_CYCLE
 
-while_cycle ::= WHILE condition SEMICOLON DO result . { 
-	printf("\nwhile_cycle ::= WHILE LBRACKET condition RBRACKET SEMICOLON DO result"); 
+while_cycle(while_cycle) ::= WHILE condition(cond) SEMICOLON DO result(res) . { 
+	while_cycle = (struct while_cycle_struct*) malloc (sizeof(struct while_cycle_struct));
+	while_cycle->conditional = cond;
+	while_cycle->instractionsToDo = res;
 }
 
 //INPUT
 
 input(inp) ::= command_line_list(cmd_line_list) . {
 	inp = cmd_line_list;
+	cmd_line_list->redirection = NULL;
 }
 
 input(inp) ::= command_line_list(cmd_line_list) redirection_list(red_list) . {
-	inp;
-	cmd_line_list;
-	red_list;
+	cmd_line_list->redirection = red_list;
+	inp = red_list;
 }
 
 //SUBSTITUTION_OF_VARIABLE
 
 substitution_of_var(subs) ::= ANDLPAREN FILENAME(ptr) RPAREN .{
-	//find var at global_var_array
 	subs = ptr;
 }
 
@@ -174,6 +241,7 @@ command(cmd) ::= FILENAME(name) .	{
 	cmd->nameOfCmd = name;
 	cmd->args = NULL;
 }
+
 command(cmd) ::= ARGUMENT(name) .	{
 	cmd = (struct command_struct*) malloc(sizeof(struct command_struct));
 	cmd->nameOfCmd = name;
@@ -182,7 +250,6 @@ command(cmd) ::= ARGUMENT(name) .	{
 
 //VARIABLE_DECLARATION
 
-//variable_declaration ::= variable(var) EQU value(val) . { printf("\nvariable EQU value %s EQU %s", var, val); }
 variable_declaration ::= variable(name) EQU argument_list(arg_list) . { 
 	struct variable_struct var;
 	var.varName = name;
@@ -229,28 +296,24 @@ redirection(redir) ::= GREAT argument(arg) . {
 	redir = (struct part_redirection_struct*) malloc (sizeof(struct part_redirection_struct));
 	redir->fileName = arg;
 	redir->type = NEW_STDOUT;	
-	printf("\nredirection ::= GREAT argument"); 
 }
 
 redirection(redir) ::= LESS argument(arg) . {
 	redir = (struct part_redirection_struct*) malloc (sizeof(struct part_redirection_struct));
 	redir->fileName = arg;
 	redir->type = NEW_STDIN;	
-	printf("\nredirection ::= LESS argument"); 
 }
 
 redirection(redir) ::= GREATAMPERSAND argument(arg) . {
 	redir = (struct part_redirection_struct*) malloc (sizeof(struct part_redirection_struct));
 	redir->fileName = arg;
-	redir->type = NEW_STDERR;
-	printf("\nredirection ::= GREATAMPERSAND argument"); 
+	redir->type = NEW_STDERR; 
 }
 
 redirection(redir) ::= GREATGREAT argument(arg) . {
 	redir = (struct part_redirection_struct*) malloc (sizeof(struct part_redirection_struct));
 	redir->fileName = arg;
 	redir->type = NEW_STDOUT_BACK;
-	printf("\nredirection ::= GREATGREAT argument"); 
 }
 
 //BRANCHING
@@ -260,7 +323,6 @@ branchig(branch) ::= IF condition(cond) THEN result(trueRes) ELSE result(falseRe
 	branch->conditional = cond;
 	branch->trueWay = trueRes;
 	branch->falseWay = falseRes;
-	printf("\nbranchig ::= IF condition THEN result ELSE result FI"); 
 }
 
 branchig(branch) ::= IF condition(cond) THEN COLON ELSE result(res) FI . {
@@ -268,7 +330,6 @@ branchig(branch) ::= IF condition(cond) THEN COLON ELSE result(res) FI . {
 	branch->conditional = cond;
 	branch->trueWay = NULL;
 	branch->falseWay = res;
-	printf("\nbranchig ::= IF condition THEN COLON ELSE result FI"); 
 }
 
 branchig(branch) ::= IF condition(cond) THEN result(res) ELSE COLON FI.	{
@@ -276,7 +337,6 @@ branchig(branch) ::= IF condition(cond) THEN result(res) ELSE COLON FI.	{
 	branch->conditional = cond;
 	branch->trueWay = res;
 	branch->falseWay = NULL;
-	printf("\nbranchig ::= IF condition THEN result ELSE COLON FI"); 
 }
 
 //CONDITION
@@ -286,34 +346,31 @@ condition(cond) ::= LBRACKET variable(var) LESS argument(arg) RBRACKET . {
 	cond->name = var;
 	cond->value = arg;
 	cond->operation = OPER_LESS;	
-	printf("\ncondition ::= LBRACKET variable LESS value RBRACKET"); 
 }
+
 condition(cond) ::= LBRACKET variable(var) GREAT argument(arg) RBRACKET . {
 	cond = (struct operate_at_variabe_struct*) malloc (sizeof(struct operate_at_variabe_struct));
 	cond->name = var;
 	cond->value = arg;
 	cond->operation = OPER_GRET;
-	printf("\ncondition ::= LBRACKET variable GREAT value RBRACKET"); 
 }
+
 condition(cond) ::= LBRACKET variable(var) EQUEQU argument(arg) RBRACKET . { 
 	cond = (struct operate_at_variabe_struct*) malloc (sizeof(struct operate_at_variabe_struct));
 	cond->name = var;
 	cond->value = arg;
 	cond->operation = OPER_CMP_EQU;
-	printf("\nLBRACKET variable EQUEQU argument RBRACKET"); 
 }
 
 //VARIABLE
 variable(var) ::= WORD(ptr) . { 
 	var = ptr; 
-	printf("\nvariable ::= WORD %s", var);
 }
 
 //ARGLIST
 
 argument_list(arg_list) ::= argument(arg) . {
-	arg_list = arg;
-	printf("\nargument_list ::= argument"); 
+	arg_list = arg; 
 }
 
 argument_list(new_arg_list) ::= argument_list(arg_list) argument(arg) . {
@@ -321,7 +378,6 @@ argument_list(new_arg_list) ::= argument_list(arg_list) argument(arg) . {
 	stpcpy(new_arg_list, arg_list);
 	strcat(new_arg_list, " \0");
 	strcat(new_arg_list, arg);
-	printf("\nargument_list ::= argument_list argument %s", new_arg_list);
 	free(arg_list);
 	free(arg);
 }
@@ -329,18 +385,16 @@ argument_list(new_arg_list) ::= argument_list(arg_list) argument(arg) . {
 //ARG
 
 argument(arg) ::= FILENAME(ptr) .	{ 
-	arg = ptr; 
-	printf("\nargument ::= FILENAME %s", arg); 
+	arg = ptr;
 }
 
 argument(arg) ::= ARGUMENT(ptr) .	{ 
 	arg = ptr; 
-	printf("\nargument ::= ARGUMENT %s", arg);
 }
 
 argument (arg) ::= substitution_of_var(subs) . {
-	//find var at global_var_array
-	arg = subs;
+	arg = findVariable (subs);
+	free(subs);
 }
 
 
