@@ -208,7 +208,9 @@ for_cycle(cycle) ::= FOR variable(var) IN_TOKEN argument_list(arg_list) SEMICOLO
 	cycle->varStates = arg_list;
 	cycle->instractionsToDo = res;
 	
-	var = arg_list = res = NULL;
+	var = NULL;
+	arg_list = NULL;
+	res = NULL;
 } 
 
 //WHILE_CYCLE
@@ -217,7 +219,8 @@ while_cycle(while_cycle) ::= WHILE condition(cond) SEMICOLON DO result(res) . {
 	while_cycle = (struct while_cycle_struct*) malloc (sizeof(struct while_cycle_struct));
 	while_cycle->conditional = cond;
 	while_cycle->instractionsToDo = res;
-	cond = res = NULL;
+	cond = NULL;
+	res = NULL;
 }
 
 //INPUT
@@ -230,8 +233,9 @@ input(inp) ::= command_line_list(cmd_line_list) . {
 
 input(inp) ::= command_line_list(cmd_line_list) redirection_list(red_list) . {
 	cmd_line_list->redirection = red_list;
-	inp = red_list;
-	cmd_line_list = red_list = NULL;
+	inp = cmd_line_list;
+	cmd_line_list = NULL;
+	red_list = NULL;
 }
 
 //SUBSTITUTION_OF_VARIABLE
@@ -316,7 +320,8 @@ command_line(cmd_line) ::= command(cmd) . {
 command_line(cmd_line) ::= command(cmd) argument_list(arg_list) . { 
 	cmd->args = arg_list;
 	cmd_line = cmd;
-	cmd = arg_list = NULL;
+	cmd = NULL;
+	arg_list = NULL;
 }
  
 //CMD
@@ -481,7 +486,7 @@ argument_list(arg_list) ::= argument(arg) . {
 
 argument_list(new_arg_list) ::= argument_list(arg_list) argument(arg) . {
 	new_arg_list = (char*) malloc ((strlen(arg) + strlen(arg_list) + 2) * sizeof(char));
-	stpcpy(new_arg_list, arg_list);
+	strcpy(new_arg_list, arg_list);
 	strcat(new_arg_list, " \0");
 	strcat(new_arg_list, arg);
 }

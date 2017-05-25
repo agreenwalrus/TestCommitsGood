@@ -11,6 +11,8 @@ Here're described rules for scanning char buffers.
 
 %option reentrant
 %option noyywrap
+%option nounput
+%option noinput
 
 %x SINGLE_QUOTED
 %x DOUBLE_QUOTED
