@@ -4,10 +4,24 @@
 struct variable_struct* global_variable_array;
 int global_variable_array_size;
 int amount_of_global_variables;
+
 char *system_commands_shell[] = {
 	"cd",
 	"pwd"
 };
+
+
+/*
+Check name of command at **system_commands_shell; If it should be excecuted at current process
+*/
+BOOL isMountedCommand(struct command_struct cmd)
+{
+	int i;
+	for (i = 0; i < AMOUNT_OF_SYSTEM_CMDS; i++)
+		if (!strcmp(system_commands_shell[i], cmd.nameOfCmd))
+			return TRUE;
+	return FALSE;
+}
 
 /*
 It gets the name of var. Search through global_variable_array.
@@ -18,8 +32,9 @@ NULL - if not
 
 char* findVariable (char *varName)
 {
-	printf("\nfindVariable");
 	int i;
+	printf("\nfindVariable");
+	
 	for (i = 0; i < amount_of_global_variables; i++)
 		if (!strcmp(varName, global_variable_array[i].varName))
 			if (global_variable_array[i].varValue)
@@ -107,8 +122,9 @@ add new variable to global_variable_array
 */
 int addVariable(struct variable_struct newVariable)
 {
-	printf("\naddVariable %s %s %d", newVariable.varName, newVariable.varValue, amount_of_global_variables);
 	int i;
+	printf("\naddVariable %s %s %d", newVariable.varName, newVariable.varValue, amount_of_global_variables);
+	
 	if (amount_of_global_variables == global_variable_array_size)
 		if (reallocGlobalVariableArray())
 			return -1;

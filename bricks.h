@@ -10,9 +10,7 @@ Struct for description of command
 #include <string.h>
 #include <stdio.h>
 
-typedef int BOOL;
-#define TRUE 1
-#define FALSE 0
+#include "definitions.h"
 
 #define FOR_NAME 				"for"
 #define WHILE_NAME 				"while"
