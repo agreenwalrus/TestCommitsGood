@@ -9,8 +9,11 @@
 
 void printIntroduction();
 void intrToTyping();
-int excecute(struct list_struct *);
+int excecuteList(struct list_struct *);
+int excecuteNode(struct node_struct *, BOOL, BOOL, struct redirection_struct*);
+int excecuteCommand(struct command_struct *, char *, char *, char *);
 void changeDirectory (char *);
+DWORD WINAPI executeForCycle(void* );
 
 
 

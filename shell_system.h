@@ -9,7 +9,9 @@
 #include "bricks.h"
 
 #define START_SIZE 10
-#define AMOUNT_OF_SYSTEM_CMDS 2
+#define AMOUNT_OF_SYSTEM_CMDS 1
+
+
 
 int initShell();							//init system variables of shell
 int reallocGlobalVariableArray();
@@ -18,7 +20,10 @@ void freeMemoryForVariable(struct variable_struct);
 int addVariable(struct variable_struct);
 char* findVariable (char *);
 BOOL isMountedCommand(struct command_struct);
-
-
+int initHProccesses (int);
+void freeHProccesses();
+void WaitForMultipleProcceses();
+int addHandleToHProccesses(HANDLE);
+int reallocHProccesses();
 
 #endif

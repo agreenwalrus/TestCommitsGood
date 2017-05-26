@@ -58,7 +58,9 @@ Grammar rules for shell.
 		free($$);
 	}		
 }
-%destructor variable { if($$) free($$); }
+%destructor variable { 
+	if($$) free($$); 
+}
 %destructor condition  { 
 	if($$) {
 		freeOperateAtVariableStruct(*$$);
