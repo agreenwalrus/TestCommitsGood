@@ -116,8 +116,8 @@ struct while_cycle_struct
 
 struct for_cycle_struct
 {
-	char *varName;
-	char *varStates;
+	char* from;
+	char* until;
 	struct list_struct *instractionsToDo;
 };
 

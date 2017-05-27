@@ -45,11 +45,11 @@ void freeWhileCycleStruct(struct while_cycle_struct st)
 
 void freeForCycleStruct(struct for_cycle_struct st)
 {
-	printf("\nfreeForCycleStruct %s %s", st.varName, st.varStates);
-	if (st.varName)
-		free(st.varName);
-	if (st.varStates)
-		free(st.varStates);
+	printf("\nfreeForCycleStruct ");
+	if (st.from)
+		free(st.from);
+	if (st.until)
+		free(st.until);
 	if (st.instractionsToDo)
 	{
 		freeListStruct(*st.instractionsToDo);

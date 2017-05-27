@@ -116,17 +116,37 @@ Grammar rules for shell.
 	printf("\nParser stack overflow!");
 }
 
-%start_symbol program
+%start_symbol program_shell
 
-program ::= result(res) EOL. { 
+program_shell ::= program(res) EOL . {
 	*list_for_return = res;
+	res = NULL;
+}
+
+program(pr) ::= result(res). { 
+	if (res)
+	{
+		res->excecAtBackGr = FALSE;
+		pr = res;
+	}
+	res = NULL;
+}
+
+program(pr) ::= result(res) AMPERSAND. { 
+	if (res)
+	{
+		res->excecAtBackGr = TRUE;
+		pr = res;
+	}
 	res = NULL;
 }
 
 //RESULT
 
 result(res) ::= .	{  
+	
 	res = NULL;
+	
 }
 
 result(res) ::= input(inp) . { 	
@@ -137,11 +157,11 @@ result(res) ::= input(inp) . {
 	inp = NULL;
 }
 
-result(res) ::= input(inp) AMPERSAND. {
+/*result(res) ::= input(inp) AMPERSAND. {
 	res = inp;
 	res->excecAtBackGr = TRUE;
 	inp = NULL;
-}
+}*/
 
 
 result(res) ::= branchig(branch) . {
@@ -196,22 +216,18 @@ result(res) ::= while_cycle(cycle) . {
 	cycle = NULL;
 }
 
-//FOR_CYCLE
+//FOR_CYCLE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-for_cycle(cycle) ::= FOR variable(var) IN_TOKEN argument_list(arg_list) SEMICOLON DO result(res). {
-	struct variable_struct st;
-	st.varName = strdup(var);
-	st.varValue = NULL;
-	addVariable(st);
-	
+for_cycle(cycle) ::= FOR FROM DIGIT(low) UNTIL DIGIT(hight) SEMICOLON DO result(res). {
+		
 	cycle = (struct for_cycle_struct*) malloc (sizeof(struct for_cycle_struct));
 	
-	cycle->varName = var;
-	cycle->varStates = arg_list;
+	cycle->from = low;
+	cycle->until = hight;
 	cycle->instractionsToDo = res;
 	
-	var = NULL;
-	arg_list = NULL;
+	low = NULL;
+	hight = NULL;
 	res = NULL;
 } 
 
@@ -507,6 +523,11 @@ argument(arg) ::= ARGUMENT(ptr) .	{
 
 argument (arg) ::= substitution_of_var(subs) . {
 	arg = findVariable (subs);
+}
+
+argument(arg) ::= DIGIT(ptr) .	{ 
+	arg = ptr;
+	ptr = NULL;
 }
 
 

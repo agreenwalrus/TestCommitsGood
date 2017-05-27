@@ -9,10 +9,10 @@
 #include "bricks.h"
 
 #define START_SIZE 10
-#define AMOUNT_OF_SYSTEM_CMDS 1
+#define AMOUNT_OF_SYSTEM_CMDS 2
 
 
-
+void resetHandles();
 int initShell();							//init system variables of shell
 int reallocGlobalVariableArray();
 void destroyShell();

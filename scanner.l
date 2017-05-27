@@ -36,7 +36,8 @@ Here're described rules for scanning char buffers.
 
 "for"					{ return FOR; }
 "do"					{ return DO; }
-"in"					{ return IN_TOKEN; }
+"from"					{ return FROM; }
+"until"					{ return UNTIL; }
 
 "while"					{ return WHILE; }
 
@@ -62,6 +63,16 @@ Here're described rules for scanning char buffers.
 
 
 [ \t\r]                 { }
+
+"-"?[1-9][0-9]*			{
+	yylval.charValue = strdup(yytext);	
+	return DIGIT; 
+}
+
+"0"	{
+	yylval.charValue = strdup(yytext);	
+	return DIGIT; 
+}
 
 ([/a-zA-Z0-9_:\.\-]+("\\\ ")*("\\\"")*("\\\#")*("\\\'")*)+       { 
 	yylval.charValue = strdup(yytext);

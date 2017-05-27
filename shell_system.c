@@ -10,12 +10,22 @@ int amountOfProc;
 int maxAmountOfHProc;
 
 char *system_commands_shell[] = {
-	"cd"
+	"cd",
+	"sleep"
 };
+
+void resetHandles()
+{
+	int i;
+	for ( i = 0 ; i < amountOfProc; i++)
+		CloseHandle(hProccesses[i]);
+	amountOfProc = 0;
+}
 
 void WaitForMultipleProcceses()
 {
 	WaitForMultipleObjects((DWORD)amountOfProc, hProccesses, TRUE, INFINITE);
+	resetHandles();
 }
 
 /*

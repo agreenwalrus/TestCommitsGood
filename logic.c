@@ -39,20 +39,70 @@ void intrToTyping()
 }
 
 /*
-Thread for for_cycle
+Start execute
 */
-DWORD WINAPI executeForCycle(void* data)
+
+int execute(struct list_struct *list)
 {
-	printf("\nFor cycle");
+	printf("\nexecute(struct list_struct *list)");
+	excecuteList(list);
+	
+	if (!list->excecAtBackGr)
+		WaitForMultipleProcceses();
+	else resetHandles();
+	
+	freeListStruct(*list);
+	free(list);
+
 	return 0;
 }
 
 /*
-Excecute command
-Return 0 if access
+Thread for for_cycle
 */
+DWORD WINAPI executeForCycle(void* data)
+{
+	int i, from, until;
+	struct for_cycle_struct *for_c = (struct for_cycle_struct *)data;
+	
+	if ((!(from = atoi(for_c->from)) && strcmp( for_c->from, "0")) || (!(until = atoi (for_c->until)) && strcmp( for_c->until, "0")))
+	{
+		printf ("Wrong arguments. Expected integers.");
+	}
+	
+	for (i = from; i < until; i++)
+	{
+		if (excecuteList(for_c->instractionsToDo))
+			return -1;
+	}
+	return 0;
+}
 
-int excecuteCommand(struct command_struct * cmd, char *redirInp, char *redirOutp, char *redirError)
+int executeBuildInCMD(char *cmdName, char *args)
+{
+	int millisec;
+	if (!strcmp(cmdName, "cd"))
+		if (!args)
+		{
+			printf ("'cd' neeeds arguments.");
+			return -1;
+		} else changeDirectory(args);
+	else if (!strcmp(cmdName, "sleep"))
+	{
+		if (!args)
+		{
+			printf ("'sleep' neeeds arguments.");
+			return -1;
+		} else if (!(millisec = atoi(args)))
+		{
+			printf ("Wrong arguments for 'sleep'");
+			return -1;
+		} else sleep_shell(millisec);
+
+	}
+}
+
+int executeOtherCMD(struct command_struct * cmd, char *redirInp, char *redirOutp, char *redirError)
 {
 	//LookAtPipes
 	STARTUPINFO StartupInfo;
@@ -63,14 +113,14 @@ int excecuteCommand(struct command_struct * cmd, char *redirInp, char *redirOutp
 	{
 		size = strlen(cmd->args) + strlen(cmd->nameOfCmd) + 3;
 		cmdLine = (char*)malloc(sizeof(char) * size);
-		strcpy_s(cmdLine,  size, cmd->nameOfCmd);
-		strcat_s(cmdLine, size, " ");
-		strcat_s(cmdLine, size, cmd->args);
+		strncpy(cmdLine, cmd->nameOfCmd, size);
+		strncat(cmdLine, " ", size);
+		strncat(cmdLine, cmd->args, size);
 	} else
 	{
 		size = strlen(cmd->nameOfCmd) + 3;
 		cmdLine = (char*)malloc(sizeof(char) * size);
-		strcpy_s(cmdLine,  size, cmd->nameOfCmd);
+		strncpy(cmdLine, cmd->nameOfCmd,  size);
 	}
 		
 	ZeroMemory( &StartupInfo, sizeof(StartupInfo) );
@@ -93,6 +143,23 @@ int excecuteCommand(struct command_struct * cmd, char *redirInp, char *redirOutp
 		return -1;
 	}
 	addHandleToHProccesses(ProcInf.hProcess);
+	return 0;
+}
+
+/*
+Excecute command
+Return 0 if access
+*/
+
+int excecuteCommand(struct command_struct * cmd, char *redirInp, char *redirOutp, char *redirError)
+{
+	if (isMountedCommand(*cmd))
+	{
+		if (executeBuildInCMD(cmd->nameOfCmd, cmd->args))
+			return -1;
+	}
+	else if (executeOtherCMD(cmd, redirInp, redirOutp, redirError))
+		return -1;
 	return 0;
 }
 
@@ -142,7 +209,7 @@ int excecuteIfBranch(struct if_branch_struct *if_br)
 Direct next excecution
 */
 
-int excecuteNode(struct node_struct * node, BOOL first, BOOL last, struct redirection_struct* redir)
+int excecuteNode(struct node_struct * node, BOOL first, BOOL last, struct redirection_struct* redir, BOOL execAtBG)
 {
 	char *inp, *out, *err;
 	inp = NULL;
@@ -171,13 +238,15 @@ int excecuteNode(struct node_struct * node, BOOL first, BOOL last, struct redire
 			return -1;
 	} else if (!strcmp(node->toDo->name, FOR_NAME))
 	{
+		printf("\nCreating for_cycle thread (%d)", execAtBG);
+		struct for_cycle_struct *temp = node->toDo->cmd.for_cycle;
 		HANDLE hThread;
 		DWORD   dwThread;
 		hThread = CreateThread( 
 				NULL,                   // default security attributes
 				0,                      // use default stack size  
 				executeForCycle,       // thread function name
-				node->toDo->cmd.for_cycle,          // argument to thread function 
+				temp,          // argument to thread function 
 				0,                      // use default creation flags 
 				&dwThread);   // returns the thread identifier 
 		if (!hThread)
@@ -185,8 +254,11 @@ int excecuteNode(struct node_struct * node, BOOL first, BOOL last, struct redire
 			printf("Error of for cycle\n");
 			return -1;
 		}
-
-		addHandleToHProccesses(hThread);
+		
+		if(!execAtBG)
+			WaitForSingleObject(hThread, INFINITE);
+		CloseHandle(hThread);
+		
 	}
 	return 0;
 }
@@ -204,9 +276,9 @@ int excecuteList(struct list_struct *list)
 	{
 		if (iter)
 		{
-			if (i == 0 && list->size == 1) excecuteNode(iter, TRUE, TRUE, list->redirection);
-			else if (i == 0) excecuteNode(iter, TRUE, FALSE, list->redirection);
-			else if (i == list->size - 1) excecuteNode(iter, FALSE, TRUE, list->redirection);
+			if (i == 0 && list->size == 1) excecuteNode(iter, TRUE, TRUE, list->redirection, list->excecAtBackGr);
+			else if (i == 0) excecuteNode(iter, TRUE, FALSE, list->redirection, list->excecAtBackGr);
+			else if (i == list->size - 1) excecuteNode(iter, FALSE, TRUE, list->redirection, list->excecAtBackGr);
 		
 
 			iter = iter->next;
@@ -215,8 +287,6 @@ int excecuteList(struct list_struct *list)
 			return -1;
 		}
 	}
-	if (!list->excecAtBackGr)
-		WaitForMultipleProcceses();
 	return 0;
 }
 
@@ -228,4 +298,12 @@ void changeDirectory (char *newPuth)
 	if (!SetCurrentDirectory(newPuth))
 		printf("%s No such file or directory.\n", newPuth);
 	return;
+}
+
+/*
+Build-in 'sleep'
+*/
+void sleep_shell(int millisec)
+{
+	Sleep(millisec);
 }

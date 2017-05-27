@@ -7,6 +7,7 @@
 #include "flexglobal.h"
 #include "shell_system.h"
 #include "bricks.h"
+#include "logic.h"
 
 #define END_OF_SESSION 1
 #define EXIT "exit\n"
@@ -63,10 +64,10 @@ int shell(char *commandLine)
 	//printf("\n cmd: %s %s %u", list->head->toDo->cmd.command->nameOfCmd, list->head->toDo->cmd.command->args, list->head->toDo->connectionWithNextBitMask);
 	printf("\n2");
 	if(list)
-		freeListStruct(*list);
+		execute(list);
+		
 	printf("\n3");
-	if(list)
-		free(list);
+	
  
     if (-1 == lexCode) {
         perror ("\nThe scanner encountered an error."); 
@@ -88,7 +89,8 @@ int main(int argc, char** argv) {
 	initShell();	
 	
 	do {
-		printf("\n>");
+		//printf("\n>");
+		intrToTyping();
 		fgets(buffer, BUF_SIZE, stdin);
 		printf("\nbuf: %s", buffer);
 		if (strcmp(buffer, EXIT) == 0)
