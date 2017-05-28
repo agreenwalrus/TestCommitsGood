@@ -1,0 +1,4 @@
+-rw-r--r--  1 Greenwalrus Администраторы   3041 May 28 20:13 log.txt
+-rw-r--r--  1 Greenwalrus Администраторы  11028 May 28 20:08 logic.c
+-rw-r--r--  1 Greenwalrus Администраторы    659 May 28 19:28 logic.h
+-rw-r--r--  1 Greenwalrus Администраторы  13641 May 28 20:08 logic.o

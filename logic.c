@@ -38,24 +38,62 @@ void intrToTyping()
 	printf("%s$", curDir);
 }
 
-/*
-Start execute
-*/
-
-int execute(struct list_struct *list)
+int executeListWithFor(struct list_struct* list)
 {
-	printf("\nexecute(struct list_struct *list)");
-	excecuteList(list);
-	
-	if (!list->excecAtBackGr)
-		WaitForMultipleProcceses();
-	else resetHandles();
-	
-	freeListStruct(*list);
-	free(list);
+	HANDLE hThread;
+	DWORD dwThread;
+
+	printf("\nCreating for_cycle thread");
+
+	hThread = CreateThread( 
+			NULL,                   // default security attributes
+			0,                      // use default stack size  
+			executeForCycle,       // thread function name
+			list,          // argument to thread function 
+			0,                      // use default creation flags 
+			&dwThread);   // returns the thread identifier 
+	if (!hThread)
+	{
+		printf("Error of for cycle\n");
+		return -1;
+	}
+		
+	if(!list->excecAtBackGr)
+		WaitForSingleObject(hThread, INFINITE);
+	CloseHandle(hThread);
+	return 0;
+}
+
+
+
+int execute(struct list_struct* list)
+{
+	printf("execute");
+
+	if (list->size == 1)
+	{
+		if (!strcmp(list->head->toDo->name, IF_NAME))
+		{
+			if (executeIfBranch(list))
+				return -1;
+			freeListStruct(*list);
+			free(list);
+		} else if (!strcmp(list->head->toDo->name, FOR_NAME))
+		{
+			if (executeListWithFor(list))
+				return -1;
+		} else if (!strcmp(list->head->toDo->name, CMD_NAME))
+		{
+			if (excecuteList (list))
+				return -1;
+		}
+
+	} else	if (excecuteList (list))
+			return -1;
 
 	return 0;
 }
+
 
 /*
 Thread for for_cycle
@@ -63,18 +101,32 @@ Thread for for_cycle
 DWORD WINAPI executeForCycle(void* data)
 {
 	int i, from, until;
-	struct for_cycle_struct *for_c = (struct for_cycle_struct *)data;
+	struct list_struct *list = (struct list_struct *)data;
+	struct for_cycle_struct *for_c;
+
+	if (!list)
+	{
+		printf("\nError at executing for cycle\n");
+		return -1;
+	}
+
+	for_c = list->head->toDo->cmd.for_cycle;
 	
 	if ((!(from = atoi(for_c->from)) && strcmp( for_c->from, "0")) || (!(until = atoi (for_c->until)) && strcmp( for_c->until, "0")))
 	{
 		printf ("Wrong arguments. Expected integers.");
+		return -1;
 	}
 	
 	for (i = from; i < until; i++)
 	{
-		if (excecuteList(for_c->instractionsToDo))
+		if (execute(for_c->instractionsToDo))
 			return -1;
 	}
+
+	freeListStruct (*list);
+	free (list);
+
 	return 0;
 }
 
@@ -98,17 +150,17 @@ int executeBuildInCMD(char *cmdName, char *args)
 			printf ("Wrong arguments for 'sleep'");
 			return -1;
 		} else sleep_shell(millisec);
-
-	}
+	} else return -1;
+	return 0;
 }
 
-int executeOtherCMD(struct command_struct * cmd, char *redirInp, char *redirOutp, char *redirError)
+int executeOtherCMD(struct command_struct * cmd, HANDLE ** handles)
 {
-	//LookAtPipes
 	STARTUPINFO StartupInfo;
 	PROCESS_INFORMATION ProcInf;
 	char *cmdLine;
 	int size;
+	printf("\nexecuteOtherCMD");
 	if (cmd->args)
 	{
 		size = strlen(cmd->args) + strlen(cmd->nameOfCmd) + 3;
@@ -122,17 +174,31 @@ int executeOtherCMD(struct command_struct * cmd, char *redirInp, char *redirOutp
 		cmdLine = (char*)malloc(sizeof(char) * size);
 		strncpy(cmdLine, cmd->nameOfCmd,  size);
 	}
-		
+
 	ZeroMemory( &StartupInfo, sizeof(StartupInfo) );
 	StartupInfo.cb = sizeof(StartupInfo);
-
 	ZeroMemory( &ProcInf, sizeof(ProcInf) );
+
+	StartupInfo.hStdInput = GetStdHandle(STD_INPUT_HANDLE);
+	StartupInfo.hStdOutput = GetStdHandle(STD_OUTPUT_HANDLE);
+	StartupInfo.hStdError =  GetStdHandle(STD_ERROR_HANDLE);
+
+	if (handles)
+	{
+		if (handles[INPUT_REDIR])
+			StartupInfo.hStdInput = *handles[INPUT_REDIR];
+		if (handles[OUTPUT_REDIR])
+			StartupInfo.hStdOutput = *handles[OUTPUT_REDIR];
+		if (handles[ERROR_REDIR])
+			StartupInfo.hStdError = *handles[ERROR_REDIR];
+	}
+	StartupInfo.dwFlags = STARTF_USESTDHANDLES;
 		
 	if( !CreateProcess( NULL,							// имя файла, который должен быть запущен
-						cmdLine,					// командная строка
+						cmdLine,						// командная строка
 						NULL,							// атрибуты защиты процесса
 						NULL,							// атрибуты защиты потока
-						FALSE,							// признак наследования дескрипторов
+						TRUE,							// признак наследования дескрипторов
 						0,								// флаг, определ¤ющий тип создаваемого процесса
 						NULL,							// указатель на блок памяти, содержащий переменные окружени¤
 						NULL,							// рабочий каталог нового процесса
@@ -142,29 +208,36 @@ int executeOtherCMD(struct command_struct * cmd, char *redirInp, char *redirOutp
 		printf( "CreateProcess is failed (%d)\n", GetLastError());
 		return -1;
 	}
-	addHandleToHProccesses(ProcInf.hProcess);
-	return 0;
-}
-
-/*
-Excecute command
-Return 0 if access
-*/
-
-int excecuteCommand(struct command_struct * cmd, char *redirInp, char *redirOutp, char *redirError)
-{
-	if (isMountedCommand(*cmd))
+	WaitForSingleObject(ProcInf.hProcess, 400);
+	if (handles)
 	{
-		if (executeBuildInCMD(cmd->nameOfCmd, cmd->args))
-			return -1;
+		if (handles[INPUT_REDIR])
+		{
+			CloseHandle(*handles[INPUT_REDIR]);
+			free(handles[INPUT_REDIR]);
+			handles[INPUT_REDIR] = NULL;
+		}
+		if (handles[OUTPUT_REDIR])
+		{
+			CloseHandle(*handles[OUTPUT_REDIR]);
+			free(handles[OUTPUT_REDIR]);
+			handles[OUTPUT_REDIR] = NULL;
+		}
+		if (handles[ERROR_REDIR])
+		{
+			CloseHandle(*handles[ERROR_REDIR]);
+			free (handles[ERROR_REDIR]);
+			handles[ERROR_REDIR];
+		}
 	}
-	else if (executeOtherCMD(cmd, redirInp, redirOutp, redirError))
-		return -1;
+	CloseHandle(ProcInf.hProcess);
+	free(cmdLine);
 	return 0;
 }
 
-int excecuteIfBranch(struct if_branch_struct *if_br)
+int executeIfBranch(struct list_struct *list)
 {
+	struct if_branch_struct *if_br = list->head->toDo->cmd.if_branch;
 	char *varValue;
 	if (!(varValue = findVariable(if_br->conditional->name)))
 	{
@@ -175,26 +248,26 @@ int excecuteIfBranch(struct if_branch_struct *if_br)
 	{
 	case OPER_CMP_EQU: {
 		if (!strcmp(varValue, if_br->conditional->value))
-			excecuteList(if_br->trueWay);
-		else excecuteList(if_br->falseWay);
+			execute(if_br->trueWay);
+		else execute(if_br->falseWay);
 		break;
 	}
 	case OPER_CMP_NOT_EQU: {
 		if (strcmp(varValue, if_br->conditional->value))
-			excecuteList(if_br->trueWay);
-		else excecuteList(if_br->falseWay);
+			execute(if_br->trueWay);
+		else execute(if_br->falseWay);
 		break;
 	}
 	case OPER_LESS: {
 		if (strcmp(varValue, if_br->conditional->value) < 0)
-			excecuteList(if_br->trueWay);
-		else excecuteList(if_br->falseWay);
+			execute(if_br->trueWay);
+		else execute(if_br->falseWay);
 		break;
 	}
 	case OPER_GRET: {
 		if (strcmp(varValue, if_br->conditional->value) > 0)
-			excecuteList(if_br->trueWay);
-		else excecuteList(if_br->falseWay);
+			execute(if_br->trueWay);
+		else execute(if_br->falseWay);
 		break;
 	}
 	default: {
@@ -205,81 +278,144 @@ int excecuteIfBranch(struct if_branch_struct *if_br)
 	return 0;
 }
 
-/*
-Direct next excecution
-*/
-
-int excecuteNode(struct node_struct * node, BOOL first, BOOL last, struct redirection_struct* redir, BOOL execAtBG)
-{
-	char *inp, *out, *err;
-	inp = NULL;
-	out = NULL;
-	err = NULL;
-
-	if (!strcmp(node->toDo->name, CMD_NAME))
-	{
-		if (first && last && redir)
-		{
-			inp = redir->inputFile;
-			out = redir->outputClearFile;
-			err = redir->errorFile;
-		} else if (first && redir)
-			inp = redir->inputFile;
-		else if (last && redir)
-		{
-			out = redir->outputClearFile;
-			err = redir->errorFile;
-		}
-		if (excecuteCommand(node->toDo->cmd.command, inp, out, err))
-			return -1;
-	} else if (!strcmp(node->toDo->name, IF_NAME))
-	{
-		if (excecuteIfBranch(node->toDo->cmd.if_branch))
-			return -1;
-	} else if (!strcmp(node->toDo->name, FOR_NAME))
-	{
-		printf("\nCreating for_cycle thread (%d)", execAtBG);
-		struct for_cycle_struct *temp = node->toDo->cmd.for_cycle;
-		HANDLE hThread;
-		DWORD   dwThread;
-		hThread = CreateThread( 
-				NULL,                   // default security attributes
-				0,                      // use default stack size  
-				executeForCycle,       // thread function name
-				temp,          // argument to thread function 
-				0,                      // use default creation flags 
-				&dwThread);   // returns the thread identifier 
-		if (!hThread)
-		{
-			printf("Error of for cycle\n");
-			return -1;
-		}
-		
-		if(!execAtBG)
-			WaitForSingleObject(hThread, INFINITE);
-		CloseHandle(hThread);
-		
-	}
-	return 0;
-}
 
 /*
 Start for proccessing input
 */
 int excecuteList(struct list_struct *list)
 {
+	HANDLE *handles[4];
+	SECURITY_ATTRIBUTES secAtr;
+	HANDLE hPipeR, hPipeW;
 	struct node_struct *iter;
 	int i;
+	printf("\nexcecuteList");
+	secAtr.nLength = sizeof(SECURITY_ATTRIBUTES);
+	secAtr.lpSecurityDescriptor = NULL;
+	secAtr.bInheritHandle = TRUE;
+
 	iter = list->head;
+
+	for (i = 0; i < 4; i++)
+		handles[i] = NULL;
 
 	for (i = 0; i < list->size; i++)
 	{
 		if (iter)
 		{
-			if (i == 0 && list->size == 1) excecuteNode(iter, TRUE, TRUE, list->redirection, list->excecAtBackGr);
-			else if (i == 0) excecuteNode(iter, TRUE, FALSE, list->redirection, list->excecAtBackGr);
-			else if (i == list->size - 1) excecuteNode(iter, FALSE, TRUE, list->redirection, list->excecAtBackGr);
-		
+			if (isMountedCommand(*iter->toDo->cmd.command))
+			{
+				if (executeBuildInCMD(iter->toDo->cmd.command->nameOfCmd, iter->toDo->cmd.command->args))
+					return -1;
+				iter = iter->next;
+				continue;
+			}
+			if (0 == i && list->redirection && list->redirection->inputFile)
+			{
+				if (!(handles[INPUT_REDIR] = (HANDLE*)malloc(sizeof(HANDLE))))
+				{
+					printf ("\nNo memory");
+					return -1;
+				}
+				*handles[INPUT_REDIR] = CreateFile(list->redirection->inputFile, GENERIC_READ, FILE_SHARE_READ, &secAtr, OPEN_EXISTING , FILE_ATTRIBUTE_NORMAL, NULL);
+				if (*handles[INPUT_REDIR] == INVALID_HANDLE_VALUE)
+				{
+					printf("\nError of opening input redirection file %d", GetLastError());
+					return -1;
+				}
+			}
+			if (list->size - 1 == i && list->redirection && list->redirection->outputClearFile)
+			{
+				if (!(handles[OUTPUT_REDIR] = (HANDLE*)malloc(sizeof(HANDLE))))
+				{
+					printf ("\nNo memory");
+					return -1;
+				}
+				*handles[OUTPUT_REDIR] = CreateFile(list->redirection->outputClearFile, GENERIC_WRITE, FILE_SHARE_WRITE, &secAtr, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+				if (*handles[OUTPUT_REDIR] == INVALID_HANDLE_VALUE)
+				{
+					printf("\nError of opening output redirection file %d", GetLastError());
+					return -1;
+				}
+			}
+			if (list->size - 1 == i && list->redirection && list->redirection->errorFile)
+			{
+				if (!(handles[ERROR_REDIR] = (HANDLE*)malloc(sizeof(HANDLE))))
+				{
+					printf ("\nNo memory");
+					return -1;
+				}
+				*handles[ERROR_REDIR] = CreateFile(list->redirection->errorFile, GENERIC_WRITE, FILE_SHARE_WRITE, &secAtr, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+				if (*handles[ERROR_REDIR] == INVALID_HANDLE_VALUE)
+				{
+					printf("\nError of opening error redirection file %d", GetLastError());
+					return -1;
+				}
+			}
+
+			if (handles[RESERVED])
+			{
+				if (!SetHandleInformation(*handles[RESERVED], 0, HANDLE_FLAG_INHERIT))
+				{
+					printf("\nError SetHandleInformation %d", GetLastError());
+					return -1;
+				}
+				handles[INPUT_REDIR] = handles[RESERVED];
+				handles[RESERVED] = NULL;
+			}
+
+			switch(iter->toDo->connectionWithNextBitMask)
+			{
+			case CONNECT_ANDAND:
+			case CONNECT_NO:
+			case CONNECT_SEMICOLON:
+				{
+					printf("\ncase CONNECT_NO");
+					if (executeOtherCMD(iter->toDo->cmd.command, handles))
+						return -1;
+					break;
+				}
+			case CONNECT_OROR:
+				{
+					if (!executeOtherCMD(iter->toDo->cmd.command, handles))
+						return -1;
+					break;
+				}
+			case CONNECT_PIPE:
+				{
+					if (!CreatePipe(&hPipeR, &hPipeW, &secAtr, 0))
+					{
+						printf("\nError of creation pipe %d", GetLastError());
+						return 0;
+					}
+
+					if (!(handles[OUTPUT_REDIR] = (HANDLE*)malloc(sizeof(HANDLE))))
+					{
+						printf ("\nNo memory");
+						return -1;
+					}
+
+					if (!(handles[RESERVED] = (HANDLE*)malloc(sizeof(HANDLE))))
+					{
+						printf ("\nNo memory");
+						return -1;
+					}
+
+					if (!SetHandleInformation(hPipeW, 0, HANDLE_FLAG_INHERIT || !SetHandleInformation(hPipeR, HANDLE_FLAG_INHERIT, 0)))
+					{
+						printf("\nError SetHandleInformation %d", GetLastError());
+						return -1;
+					}
+
+					*handles[OUTPUT_REDIR] = hPipeW;
+					*handles[RESERVED] = hPipeR;
+
+					if (executeOtherCMD(iter->toDo->cmd.command, handles))
+						return -1;
+
+					break;
+				}
+			}
 
 			iter = iter->next;
 		} else {

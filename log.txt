@@ -5,7 +5,7 @@ Parser state: Shift 31
 
 Parser state: Stack: FILENAME
 
-Parser state: Input DOLLARLPAREN
+Parser state: Input DIGIT
 
 Parser state: Reduce [command ::= FILENAME].
 
@@ -13,31 +13,13 @@ Parser state: Shift 6
 
 Parser state: Stack: command
 
-Parser state: Shift 73
+Parser state: Shift 25
 
-Parser state: Stack: command DOLLARLPAREN
-
-Parser state: Input FILENAME
-
-Parser state: Shift 72
-
-Parser state: Stack: command DOLLARLPAREN FILENAME
-
-Parser state: Input RPAREN
-
-Parser state: Shift 27
-
-Parser state: Stack: command DOLLARLPAREN FILENAME RPAREN
+Parser state: Stack: command DIGIT
 
 Parser state: Input EOL
 
-Parser state: Reduce [substitution_of_var ::= DOLLARLPAREN FILENAME RPAREN].
-
-Parser state: Shift 26
-
-Parser state: Stack: command substitution_of_var
-
-Parser state: Reduce [argument ::= substitution_of_var].
+Parser state: Reduce [argument ::= DIGIT].
 
 Parser state: Shift 34
 

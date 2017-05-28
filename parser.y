@@ -16,6 +16,12 @@ Grammar rules for shell.
 	freeListStruct(*$$); 
 	free($$); 
 }}
+
+%destructor program { 
+	if($$){
+		freeListStruct(*$$); 
+		free($$); 
+}}
 %destructor input { 
 	if($$){
 		freeListStruct(*$$); 
@@ -83,6 +89,7 @@ Grammar rules for shell.
 
 %default_type {char *}
 %token_type {char *}
+%type program { struct list_struct* }
 %type result { struct list_struct* }
 %type input { struct list_struct* }
 %type command_line_list { struct list_struct* }

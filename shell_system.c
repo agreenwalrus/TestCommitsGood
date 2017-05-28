@@ -14,46 +14,46 @@ char *system_commands_shell[] = {
 	"sleep"
 };
 
-void resetHandles()
+/*void resetHandles()
 {
 	int i;
 	for ( i = 0 ; i < amountOfProc; i++)
 		CloseHandle(hProccesses[i]);
 	amountOfProc = 0;
-}
+}*/
 
-void WaitForMultipleProcceses()
-{
-	WaitForMultipleObjects((DWORD)amountOfProc, hProccesses, TRUE, INFINITE);
-	resetHandles();
-}
+//void WaitForMultipleProcceses()
+//{
+//	WaitForMultipleObjects((DWORD)amountOfProc, hProccesses, TRUE, INFINITE);
+//	resetHandles();
+//}
 
-/*
-Free memory
-*/
-
-void freeHProccesses()
-{
-	free(hProccesses);
-	hProccesses = NULL;
-	amountOfProc = 0;
-}
-
-/*
-Add handle to array
-*/
-
-int addHandleToHProccesses(HANDLE hProc)
-{
-	if (amountOfProc == maxAmountOfHProc)
-		if (reallocHProccesses())
-			return -1;
-
-	hProccesses[amountOfProc] = hProc;
-	amountOfProc = amountOfProc + 1;
-
-	return 0;
-}
+///*
+//Free memory
+//*/
+//
+//void freeHProccesses()
+//{
+//	free(hProccesses);
+//	hProccesses = NULL;
+//	amountOfProc = 0;
+//}
+//
+///*
+//Add handle to array
+//*/
+//
+//int addHandleToHProccesses(HANDLE hProc)
+//{
+//	if (amountOfProc == maxAmountOfHProc)
+//		if (reallocHProccesses())
+//			return -1;
+//
+//	hProccesses[amountOfProc] = hProc;
+//	amountOfProc = amountOfProc + 1;
+//
+//	return 0;
+//}
 
 /*
 Check name of command at **system_commands_shell; If it should be excecuted at current process
@@ -106,20 +106,21 @@ int initShell()
 	global_variable_array_size = START_SIZE;
 	amount_of_global_variables = 0;
 
-	if (!(hProccesses = (HANDLE*) malloc(sizeof(HANDLE) * START_SIZE)))
+	/*if (!(hProccesses = (HANDLE*) malloc(sizeof(HANDLE) * START_SIZE)))
 	{
 		printf ("\nError of allocation memory for hProccesses (%x)", GetLastError());
 		return -1;
 	}
 	amountOfProc = 0;
-	maxAmountOfHProc = START_SIZE;
+	maxAmountOfHProc = START_SIZE;*/
 
 	return 0;
 }
 
 /*
-Realloc memory for hProccesses
-*/
+
+//Realloc memory for hProccesses
+
 
 int reallocHProccesses()
 {
@@ -140,7 +141,7 @@ int reallocHProccesses()
 
 	return 0;
 
-}
+}*/
 
 /*
 realloc memory of global_variable_array

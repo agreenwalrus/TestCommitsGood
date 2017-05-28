@@ -20,10 +20,10 @@ void freeMemoryForVariable(struct variable_struct);
 int addVariable(struct variable_struct);
 char* findVariable (char *);
 BOOL isMountedCommand(struct command_struct);
-int initHProccesses (int);
-void freeHProccesses();
+//int initHProccesses (int);
+/*void freeHProccesses();
 void WaitForMultipleProcceses();
 int addHandleToHProccesses(HANDLE);
-int reallocHProccesses();
+int reallocHProccesses();*/
 
 #endif
