@@ -1,4 +1,6 @@
--rw-r--r--  1 Greenwalrus Администраторы   3041 May 28 20:13 log.txt
--rw-r--r--  1 Greenwalrus Администраторы  11028 May 28 20:08 logic.c
--rw-r--r--  1 Greenwalrus Администраторы    659 May 28 19:28 logic.h
--rw-r--r--  1 Greenwalrus Администраторы  13641 May 28 20:08 logic.o
+-rw-r--r-- 1 Greenwalrus Администраторы   3818 May 27 19:24 bricks.c
+-rw-r--r-- 1 Greenwalrus Администраторы   3521 May 27 19:23 bricks.h
+-rw-r--r-- 1 Greenwalrus Администраторы    108 May 25 22:27 definitions.h
+-rw-r--r-- 1 Greenwalrus Администраторы  27773 May 20 12:28 lempar.c
+-rw-r--r-- 1 Greenwalrus Администраторы    325 May 28 20:27 output.txt
+-rw-r--r-- 1 Greenwalrus Администраторы   2270 May 27 19:46 scanner.l

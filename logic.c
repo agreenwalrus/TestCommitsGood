@@ -86,10 +86,17 @@ int execute(struct list_struct* list)
 		{
 			if (excecuteList (list))
 				return -1;
+			freeListStruct(*list);
+			free(list);
 		}
 
-	} else	if (excecuteList (list))
+	} else	
+	{
+		if (excecuteList (list))
 			return -1;
+		freeListStruct(*list);
+			free(list);
+	}
 
 	return 0;
 }
@@ -120,7 +127,7 @@ DWORD WINAPI executeForCycle(void* data)
 	
 	for (i = from; i < until; i++)
 	{
-		if (execute(for_c->instractionsToDo))
+		if (excecuteList(for_c->instractionsToDo))
 			return -1;
 	}
 
@@ -320,7 +327,7 @@ int excecuteList(struct list_struct *list)
 				*handles[INPUT_REDIR] = CreateFile(list->redirection->inputFile, GENERIC_READ, FILE_SHARE_READ, &secAtr, OPEN_EXISTING , FILE_ATTRIBUTE_NORMAL, NULL);
 				if (*handles[INPUT_REDIR] == INVALID_HANDLE_VALUE)
 				{
-					printf("\nError of opening input redirection file %d", GetLastError());
+					printf("\nError of opening input redirection file %s %d", list->redirection->inputFile, GetLastError());
 					return -1;
 				}
 			}

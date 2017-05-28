@@ -225,7 +225,7 @@ result(res) ::= while_cycle(cycle) . {
 
 //FOR_CYCLE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-for_cycle(cycle) ::= FOR FROM DIGIT(low) UNTIL DIGIT(hight) SEMICOLON DO result(res). {
+for_cycle(cycle) ::= FOR FROM DIGIT(low) UNTIL DIGIT(hight) SEMICOLON DO input(res). {
 		
 	cycle = (struct for_cycle_struct*) malloc (sizeof(struct for_cycle_struct));
 	
@@ -240,7 +240,7 @@ for_cycle(cycle) ::= FOR FROM DIGIT(low) UNTIL DIGIT(hight) SEMICOLON DO result(
 
 //WHILE_CYCLE
 
-while_cycle(while_cycle) ::= WHILE condition(cond) SEMICOLON DO result(res) . { 
+while_cycle(while_cycle) ::= WHILE condition(cond) SEMICOLON DO input(res) . { 
 	while_cycle = (struct while_cycle_struct*) malloc (sizeof(struct while_cycle_struct));
 	while_cycle->conditional = cond;
 	while_cycle->instractionsToDo = res;

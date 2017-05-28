@@ -5,7 +5,7 @@ Parser state: Shift 31
 
 Parser state: Stack: FILENAME
 
-Parser state: Input DIGIT
+Parser state: Input FILENAME
 
 Parser state: Reduce [command ::= FILENAME].
 
@@ -13,13 +13,13 @@ Parser state: Shift 6
 
 Parser state: Stack: command
 
-Parser state: Shift 25
+Parser state: Shift 29
 
-Parser state: Stack: command DIGIT
+Parser state: Stack: command FILENAME
 
 Parser state: Input EOL
 
-Parser state: Reduce [argument ::= DIGIT].
+Parser state: Reduce [argument ::= FILENAME].
 
 Parser state: Shift 34
 
