@@ -13,7 +13,18 @@ char *system_commands_shell[] = {
 	"cd",
 	"sleep"
 };
-
+void getHistoryFilePath(char* buffer, int size)
+{
+	if (!GetCurrentDirectory(size, buffer))
+	{
+		printf ("Error of getting current directory %d\n", GetLastError());
+		return;
+	}
+	printf("%s", buffer);
+	strncat(buffer, "\\\0", size);
+	strncat(buffer, HISTORY_FILE, size);
+	printf("%s", buffer);
+}
 /*void resetHandles()
 {
 	int i;

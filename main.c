@@ -19,6 +19,8 @@
 #define EXIT "exit"
 
 
+
+
 #define BUF_SIZE 200
 
 void* ParseAlloc(void* (*allocProc)(size_t));
@@ -90,13 +92,15 @@ int shell(char *commandLine)
 
 int main(int argc, char** argv) {
 	
-	char *buffer = NULL, introduction[BUF_SIZE + BUF_SIZE + 1];
+	char *buffer = NULL, introduction[BUF_SIZE + BUF_SIZE + 1], histotyFile[BUF_SIZE];
 	//char* history_path = get_history_path();
     
 	using_history ();
 	//initialize_readline ();
+	getHistoryFilePath(histotyFile, BUF_SIZE);
+	printf("\n%s", histotyFile);
 	initShell();	
-	//read_history(history_path);
+	read_history(histotyFile);
 	do {
 		//printf("\n>");
 		if (buffer)
@@ -112,7 +116,7 @@ int main(int argc, char** argv) {
 		if (buffer && *buffer)
 		{
 			add_history(buffer);
-			write_history(buffer);
+			write_history(histotyFile);
 		}
 		printf("\nbuf: %s1", buffer);
 		if (strcmp(buffer, EXIT) == 0)
@@ -120,7 +124,6 @@ int main(int argc, char** argv) {
 	} while (! shell(buffer));
 	
 	destroyShell();
-	//free(history_path);
 	getchar();
 	
 	return 0;

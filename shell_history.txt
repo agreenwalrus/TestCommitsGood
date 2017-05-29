@@ -1,0 +1,20 @@
+cd
+cd lol
+exit
+exit
+cd ..
+cD:
+dh
+for from 1 until 10 ; do echo Julia && sleep 100
+cd ..
+cd ..
+cd Julia
+exit
+a = 10
+ech0 $(a)
+echo $(a)
+echo "a = " $(a)
+echo "a =" $(a)
+exit
+less input
+less input.txt

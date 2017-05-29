@@ -7,6 +7,7 @@
 
 #include "definitions.h"
 #include "bricks.h"
+#define HISTORY_FILE "shell_history.txt"
 
 #define START_SIZE 10
 #define AMOUNT_OF_SYSTEM_CMDS 2
@@ -20,6 +21,7 @@ void freeMemoryForVariable(struct variable_struct);
 int addVariable(struct variable_struct);
 char* findVariable (char *);
 BOOL isMountedCommand(struct command_struct);
+void getHistoryFilePath(char*, int);
 //int initHProccesses (int);
 /*void freeHProccesses();
 void WaitForMultipleProcceses();
