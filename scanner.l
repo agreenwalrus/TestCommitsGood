@@ -49,7 +49,6 @@ Here're described rules for scanning char buffers.
 "["                  	{ return LBRACKET; }
 "]"                   	{ return RBRACKET; } 
 ":"						{ return COLON; }
-"\n"					{ return EOL; }
 ">"						{ return GREAT; }
 ">>"					{ return GREATGREAT; }
 "<"						{ return LESS; }
@@ -62,7 +61,7 @@ Here're described rules for scanning char buffers.
 
 
 
-[ \t\r]                 { }
+[ \t\r\n]                 { }
 
 "-"?[1-9][0-9]*			{
 	yylval.charValue = strdup(yytext);	

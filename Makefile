@@ -2,12 +2,15 @@
 
 CC = gcc
 
-CFLAGS  = -g -c -Wall -pedantic 
+CFLAGS  = -g -c -Wall -pedantic  
+
+HISTORI_LIB = -L"./" -l"history5"
+READLINE_LIB = -L"./" -l"readline5"
 
 all: shell
 	
 shell: main.o parser.o scanner.o shell_system.o bricks.o logic.o
-	$(CC) -o shell main.o parser.o scanner.o bricks.o shell_system.o logic.o
+	$(CC) $(HISTORI_LIB) $(READLINE_LIB) -o shell main.o parser.o scanner.o bricks.o shell_system.o logic.o
 	
 main.o: main.c parser.h scanner.yy.h
 	$(CC) $(CFLAGS) main.c 

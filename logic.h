@@ -12,8 +12,10 @@
 #define ERROR_REDIR 2
 #define RESERVED 3
 
+#define INTROD_SIZE BUF_SIZE + BUF_SIZE + 1
+
 void printIntroduction();
-void intrToTyping();
+void intrToTyping(char *, int);
 int execute(struct list_struct* );
 int executeIfBranch(struct list_struct*);
 DWORD WINAPI executeForCycle(void* );

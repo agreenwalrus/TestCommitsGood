@@ -125,7 +125,7 @@ Grammar rules for shell.
 
 %start_symbol program_shell
 
-program_shell ::= program(res) EOL . {
+program_shell ::= program(res). {
 	*list_for_return = res;
 	res = NULL;
 }

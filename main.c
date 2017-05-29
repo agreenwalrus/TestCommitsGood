@@ -2,15 +2,21 @@
 #include <stdlib.h>
 #include <Windows.h>
 
+
+#define READLINE_LIBRARY
+
 #include "parser.h"
 #include "scanner.yy.h"
 #include "flexglobal.h"
 #include "shell_system.h"
 #include "bricks.h"
 #include "logic.h"
+#include "readline/rlstdc.h"
+#include "readline/readline.h"
+#include "readline/history.h"
 
 #define END_OF_SESSION 1
-#define EXIT "exit\n"
+#define EXIT "exit"
 
 
 #define BUF_SIZE 200
@@ -84,21 +90,37 @@ int shell(char *commandLine)
 
 int main(int argc, char** argv) {
 	
-	char buffer[BUF_SIZE];
-	
+	char *buffer = NULL, introduction[BUF_SIZE + BUF_SIZE + 1];
+	//char* history_path = get_history_path();
+    
+	using_history ();
+	//initialize_readline ();
 	initShell();	
-	
+	//read_history(history_path);
 	do {
 		//printf("\n>");
-		intrToTyping();
-		fgets(buffer, BUF_SIZE, stdin);
-		printf("\nbuf: %s", buffer);
+		if (buffer)
+		{
+			free(buffer);
+			buffer = NULL;
+		}
+		intrToTyping(introduction, INTROD_SIZE);
+
+		//fgets(buffer, BUF_SIZE, stdin);
+		buffer = readline(introduction);
+		printf("\nbuf: %s1 %d", buffer, strlen(buffer));
+		if (buffer && *buffer)
+		{
+			add_history(buffer);
+			write_history(buffer);
+		}
+		printf("\nbuf: %s1", buffer);
 		if (strcmp(buffer, EXIT) == 0)
 			break;
 	} while (! shell(buffer));
 	
 	destroyShell();
-	
+	//free(history_path);
 	getchar();
 	
 	return 0;

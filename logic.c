@@ -27,15 +27,21 @@ void printIntroduction()
 /*
 Prints current directory
 */
-void intrToTyping()
+void intrToTyping(char *result, int size)
 {
-	char curDir[BUFSIZ + 1];
-	if (!GetCurrentDirectory(BUFSIZ, curDir))
+	int len;
+	if (!GetCurrentDirectory(size - 1, &result[1]))
 	{
 		printf ("Error of getting current directory %d\n", GetLastError());
+		result[0] = '\n';
+		result[1] = " ";
+		result[2] = "\0";
 		return;
 	}
-	printf("%s$", curDir);
+	result[0] = '\n';
+	len = strlen(result);
+	result[len] = '$';
+	result[len + 1] = '\0';
 }
 
 int executeListWithFor(struct list_struct* list)

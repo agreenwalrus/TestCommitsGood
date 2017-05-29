@@ -5,7 +5,7 @@ Parser state: Shift 31
 
 Parser state: Stack: FILENAME
 
-Parser state: Input FILENAME
+Parser state: Input $
 
 Parser state: Reduce [command ::= FILENAME].
 
@@ -13,25 +13,7 @@ Parser state: Shift 6
 
 Parser state: Stack: command
 
-Parser state: Shift 29
-
-Parser state: Stack: command FILENAME
-
-Parser state: Input EOL
-
-Parser state: Reduce [argument ::= FILENAME].
-
-Parser state: Shift 34
-
-Parser state: Stack: command argument
-
-Parser state: Reduce [argument_list ::= argument].
-
-Parser state: Shift 9
-
-Parser state: Stack: command argument_list
-
-Parser state: Reduce [command_line ::= command argument_list].
+Parser state: Reduce [command_line ::= command].
 
 Parser state: Shift 36
 
@@ -57,17 +39,11 @@ Parser state: Stack: result
 
 Parser state: Reduce [program ::= result].
 
-Parser state: Shift 84
+Parser state: Shift 83
 
 Parser state: Stack: program
 
-Parser state: Shift 83
-
-Parser state: Stack: program EOL
-
-Parser state: Input $
-
-Parser state: Reduce [program_shell ::= program EOL].
+Parser state: Reduce [program_shell ::= program].
 
 Parser state: Accept!
 
