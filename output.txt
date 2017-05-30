@@ -1,1 +1,7 @@
-All you need is love
+Makefile       input.txt  logic.o     parser.y	     shell.exe
+bricks.c       lemon.c	  main.c      readline	     shell_history.txt
+bricks.h       lemon.exe  main.o      readline5.dll  shell_system.c
+bricks.o       lempar.c   output.txt  scanner.l      shell_system.h
+definitions.h  log.txt	  parser.h    scanner.o      shell_system.o
+flexglobal.h   logic.c	  parser.o    scanner.yy.c
+history5.dll   logic.h	  parser.out  scanner.yy.h

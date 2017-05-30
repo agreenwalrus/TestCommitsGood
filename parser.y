@@ -80,6 +80,11 @@ Grammar rules for shell.
 	}		
 }
 
+%destructor bound  { 
+	if($$) 
+		free($$);	
+}
+
 
 %left ANDAND .
 %left OROR .
@@ -89,6 +94,7 @@ Grammar rules for shell.
 
 %default_type {char *}
 %token_type {char *}
+%type bound { char* }
 %type program { struct list_struct* }
 %type result { struct list_struct* }
 %type input { struct list_struct* }
@@ -225,7 +231,7 @@ result(res) ::= while_cycle(cycle) . {
 
 //FOR_CYCLE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-for_cycle(cycle) ::= FOR FROM DIGIT(low) UNTIL DIGIT(hight) SEMICOLON DO input(res). {
+for_cycle(cycle) ::= FOR FROM bound(low) UNTIL bound(hight) SEMICOLON DO input(res). {
 		
 	cycle = (struct for_cycle_struct*) malloc (sizeof(struct for_cycle_struct));
 	
@@ -237,6 +243,14 @@ for_cycle(cycle) ::= FOR FROM DIGIT(low) UNTIL DIGIT(hight) SEMICOLON DO input(r
 	hight = NULL;
 	res = NULL;
 } 
+
+bound(bou) ::= DIGIT(dig) . {
+	bou = dig;
+	dig = NULL;
+}
+bound(bou) ::= substitution_of_var(sub) . {
+	bou = findVariable (sub);
+}
 
 //WHILE_CYCLE
 

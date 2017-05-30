@@ -18,3 +18,68 @@ echo "a =" $(a)
 exit
 less input
 less input.txt
+ls -al | grep Make
+ls -al
+exit
+dir > output.txt
+a = 10
+echo $(a)
+for from 0 until $(a) ; do echo Julia && sleep 1000
+for from 0 until 10 ; do echo Julia && sleep 1000
+for from 0 until 10 ; do echo Julia && sleep 1000 &
+cd ..
+cd ..
+exit
+for from $(a) until 10 ; do echo lo
+a = 10
+for from 0 until $(a); do echo love
+for from 0 until $(a) ; do echo love
+exit
+for from 0 until $(a) ; do echo love
+for from 0 until $(a) ; do echo love
+exit
+for from 0 until $(a) ; do echo love
+for from 0 until $(a) ; do echo love
+for from 0 until $(a) ; do echo love
+a = 10
+echo $(a)
+for from 0 until $(a) ; do echo love
+for from 0 until $(a) ; do echo love
+b = 10
+exit
+àþK
+eit
+exit
+for from 0 u­il $(a) ; do echo love
+a = 10
+for from 0 until $(a) ; do echo love
+for from 0 until $(a) ; do echo love
+for from 0 until $(a) ; do echo love && sleeep 1000
+or from 0 until $(a) ; do echo love && sleep 1000
+for from 0 until $(a) ; do echo love && sleep 1000
+echo love
+sleep 1000
+ls
+ls -a
+ls -l
+ls -v
+ls -l
+ls -l | .o
+ls -l | grep .o
+ls -l | grep log
+ls -l | grep 20:30
+ls -l | grep 20:23
+ls -l | grep 20:30
+ls -l 
+exit
+for from 0 until $(a) ; do echo love && sleep 1000
+for from 0 until $(a) ; do echo love && sleep 1000
+for from 0 until $(a) ; do echo love && sleep 1000
+for from 0 until $(a) ; do echo love && sleep 1000
+for from 0 until $(a) ; do echo love && sleep 1000
+for from 0 until $(a) ; do echo love && sleep 1000
+a = 10
+for from 0 until $(a) ; do echo love && sleep 1000
+a = pop
+for from 0 until $(a) ; do echo love && sleep 1000
+exit

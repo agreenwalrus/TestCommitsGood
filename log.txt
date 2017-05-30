@@ -1,9 +1,81 @@
 
+Parser state: Input FOR
+
+Parser state: Shift 83
+
+Parser state: Stack: FOR
+
+Parser state: Input FROM
+
+Parser state: Shift 23
+
+Parser state: Stack: FOR FROM
+
+Parser state: Input DIGIT
+
+Parser state: Shift 64
+
+Parser state: Stack: FOR FROM DIGIT
+
+Parser state: Input UNTIL
+
+Parser state: Reduce [bound ::= DIGIT].
+
+Parser state: Shift 82
+
+Parser state: Stack: FOR FROM bound
+
+Parser state: Shift 22
+
+Parser state: Stack: FOR FROM bound UNTIL
+
+Parser state: Input DOLLARLPAREN
+
+Parser state: Shift 79
+
+Parser state: Stack: FOR FROM bound UNTIL DOLLARLPAREN
+
 Parser state: Input FILENAME
 
-Parser state: Shift 31
+Parser state: Shift 78
 
-Parser state: Stack: FILENAME
+Parser state: Stack: FOR FROM bound UNTIL DOLLARLPAREN FILENAME
+
+Parser state: Input RPAREN
+
+Parser state: Shift 27
+
+Parser state: Stack: FOR FROM bound UNTIL DOLLARLPAREN FILENAME RPAREN
+
+Parser state: Input SEMICOLON
+
+Parser state: Reduce [substitution_of_var ::= DOLLARLPAREN FILENAME RPAREN].
+
+Parser state: Shift 63
+
+Parser state: Stack: FOR FROM bound UNTIL substitution_of_var
+
+Parser state: Reduce [bound ::= substitution_of_var].
+
+Parser state: Shift 81
+
+Parser state: Stack: FOR FROM bound UNTIL bound
+
+Parser state: Shift 80
+
+Parser state: Stack: FOR FROM bound UNTIL bound SEMICOLON
+
+Parser state: Input DO
+
+Parser state: Shift 5
+
+Parser state: Stack: FOR FROM bound UNTIL bound SEMICOLON DO
+
+Parser state: Input FILENAME
+
+Parser state: Shift 35
+
+Parser state: Stack: FOR FROM bound UNTIL bound SEMICOLON DO FILENAME
 
 Parser state: Input FILENAME
 
@@ -11,53 +83,107 @@ Parser state: Reduce [command ::= FILENAME].
 
 Parser state: Shift 6
 
-Parser state: Stack: command
+Parser state: Stack: FOR FROM bound UNTIL bound SEMICOLON DO command
 
-Parser state: Shift 29
+Parser state: Shift 31
 
-Parser state: Stack: command FILENAME
+Parser state: Stack: FOR FROM bound UNTIL bound SEMICOLON DO command FILENAME
 
-Parser state: Input $
+Parser state: Input ANDAND
 
 Parser state: Reduce [argument ::= FILENAME].
 
-Parser state: Shift 34
+Parser state: Shift 36
 
-Parser state: Stack: command argument
+Parser state: Stack: FOR FROM bound UNTIL bound SEMICOLON DO command argument
 
 Parser state: Reduce [argument_list ::= argument].
 
 Parser state: Shift 9
 
-Parser state: Stack: command argument_list
+Parser state: Stack: FOR FROM bound UNTIL bound SEMICOLON DO command argument_list
 
 Parser state: Reduce [command_line ::= command argument_list].
 
-Parser state: Shift 36
+Parser state: Shift 38
 
-Parser state: Stack: command_line
+Parser state: Stack: FOR FROM bound UNTIL bound SEMICOLON DO command_line
 
 Parser state: Reduce [command_line_list ::= command_line].
 
 Parser state: Shift 10
 
-Parser state: Stack: command_line_list
+Parser state: Stack: FOR FROM bound UNTIL bound SEMICOLON DO command_line_list
+
+Parser state: Shift 20
+
+Parser state: Stack: FOR FROM bound UNTIL bound SEMICOLON DO command_line_list ANDAND
+
+Parser state: Input FILENAME
+
+Parser state: Shift 35
+
+Parser state: Stack: FOR FROM bound UNTIL bound SEMICOLON DO command_line_list ANDAND FILENAME
+
+Parser state: Input DIGIT
+
+Parser state: Reduce [command ::= FILENAME].
+
+Parser state: Shift 6
+
+Parser state: Stack: FOR FROM bound UNTIL bound SEMICOLON DO command_line_list ANDAND command
+
+Parser state: Shift 28
+
+Parser state: Stack: FOR FROM bound UNTIL bound SEMICOLON DO command_line_list ANDAND command DIGIT
+
+Parser state: Input $
+
+Parser state: Reduce [argument ::= DIGIT].
+
+Parser state: Shift 36
+
+Parser state: Stack: FOR FROM bound UNTIL bound SEMICOLON DO command_line_list ANDAND command argument
+
+Parser state: Reduce [argument_list ::= argument].
+
+Parser state: Shift 9
+
+Parser state: Stack: FOR FROM bound UNTIL bound SEMICOLON DO command_line_list ANDAND command argument_list
+
+Parser state: Reduce [command_line ::= command argument_list].
+
+Parser state: Shift 40
+
+Parser state: Stack: FOR FROM bound UNTIL bound SEMICOLON DO command_line_list ANDAND command_line
+
+Parser state: Reduce [command_line_list ::= command_line_list ANDAND command_line].
+
+Parser state: Shift 10
+
+Parser state: Stack: FOR FROM bound UNTIL bound SEMICOLON DO command_line_list
 
 Parser state: Reduce [input ::= command_line_list].
 
-Parser state: Shift 56
+Parser state: Shift 53
 
-Parser state: Stack: input
+Parser state: Stack: FOR FROM bound UNTIL bound SEMICOLON DO input
 
-Parser state: Reduce [result ::= input].
+Parser state: Reduce [for_cycle ::= FOR FROM bound UNTIL bound SEMICOLON DO input].
 
-Parser state: Shift 61
+Parser state: Shift 55
+
+Parser state: Stack: for_cycle
+
+Parser state: Reduce [result ::= for_cycle].
+
+Parser state: Shift 65
 
 Parser state: Stack: result
 
 Parser state: Reduce [program ::= result].
 
-Parser state: Shift 83
+Parser state: Shift 85
 
 Parser state: Stack: program
 

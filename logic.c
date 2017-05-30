@@ -66,6 +66,11 @@ int executeListWithFor(struct list_struct* list)
 		
 	if(!list->excecAtBackGr)
 		WaitForSingleObject(hThread, INFINITE);
+	/*if (list)
+	{
+		freeListStruct(*list);
+		free(list);
+	}*/
 	CloseHandle(hThread);
 	return 0;
 }
@@ -124,19 +129,27 @@ DWORD WINAPI executeForCycle(void* data)
 	}
 
 	for_c = list->head->toDo->cmd.for_cycle;
-	
-	if ((!(from = atoi(for_c->from)) && strcmp( for_c->from, "0")) || (!(until = atoi (for_c->until)) && strcmp( for_c->until, "0")))
+	if (for_c->from && for_c->until)
 	{
-		printf ("Wrong arguments. Expected integers.");
-		return -1;
-	}
-	
-	for (i = from; i < until; i++)
-	{
-		if (excecuteList(for_c->instractionsToDo))
+		if ((!(from = atoi(for_c->from)) && strcmp( for_c->from, "0")) || (!(until = atoi (for_c->until)) && strcmp( for_c->until, "0")))
+		{
+			printf ("Wrong arguments. Expected integers. fom %s until %s", for_c->from, for_c->until);
+			freeListStruct (*list);
+			free (list);
 			return -1;
-	}
+		}
 
+	
+		for (i = from; i < until; i++)
+		{
+			if (excecuteList(for_c->instractionsToDo))
+			{
+				freeListStruct (*list);
+				free (list);
+				ExitThread (-1);
+			}
+		}
+	} else printf ("Wrong arguments. Expected integers. [from %s until %s]", for_c->from, for_c->until);
 	freeListStruct (*list);
 	free (list);
 
