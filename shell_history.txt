@@ -83,3 +83,44 @@ for from 0 until $(a) ; do echo love && sleep 1000
 a = pop
 for from 0 until $(a) ; do echo love && sleep 1000
 exit
+cat Makefile
+C:\emu8086\emu8086
+C:\emu8086\emu8086.exe
+C:/emu8086/emu8086.exe
+make
+shQuit
+make
+C:/emu8086/emu8086.exe
+echo love
+make
+echo love
+echo love
+echo love && sleep 1000
+C:/emu8086/emu8086
+echo love
+for from 1 until 10 ; do echo love && sleep 10
+for from 1 until 10 ; do echo love && sleep 1000
+for from 1 until 10 ; do echo love && echo Julia && sleep 1000
+ls -al | grep Make
+help
+exit
+help
+exit
+help
+exit
+help
+exit
+exit
+for from 0 until $(a); do 
+for from 0 until $(a) ; do : 
+for from 0 until $(a) ; do echo love
+a = 10
+for from 0 until $(a) ; do echo love
+echo love > output.txt
+cat output.txt 
+shell
+exit
+exit
+echo Julia is cool > output.txt
+cat output.txt 
+exit

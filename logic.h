@@ -25,6 +25,7 @@ int executeBuildInCMD(char *cmdName, char *args);
 int executeList(struct list_struct *);
 void changeDirectory (char *);
 void sleep_shell(int);
+void help();
 
 
 

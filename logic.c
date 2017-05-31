@@ -1,5 +1,22 @@
 #include "logic.h"
 
+void help()
+{
+	printf ("\n------------------------------------------ HELP ----------------------------------------------------");
+	printf ("\n\n'help' - command for getting help information. Doesn't need arguments;");
+	printf ("\n'cd' - command for changing directory. Doesn't need arguments;");
+	printf ("\n'sleep' - command for stopping current thread. Needs arguments(number milliseconds for sleep);");
+	printf ("\n'exit' - exit from shell.  Doesn't need arguments;");
+	printf ("\n\nOther cases:");
+	printf ("\nif cond then cmds_to_do else cmds_to_do;");
+	printf ("\nfrom low_bound until high_bound do cmds_to_do [&]?;");
+	printf ("\n\nYou can also use variables:");
+	printf ("\n~ definition: var_name = value");
+	printf ("\n~ boxing: echo $(var_name) => result: value(at the stdout)");
+	printf ("\n\nOther commands:");
+	printf ("\ncmd_name [argument]* ['&&' or '||' or '|' cmd_name [argument]*]*['>' or '<' or '>&' filename]{0, 3}.");
+	printf ("\n\n------------------------------------------ HELP ----------------------------------------------------\n");
+}
 
 /*
 It's an introduction for starting program
@@ -176,7 +193,11 @@ int executeBuildInCMD(char *cmdName, char *args)
 			printf ("Wrong arguments for 'sleep'");
 			return -1;
 		} else sleep_shell(millisec);
-	} else return -1;
+	} else if (!strcmp(cmdName, "help"))
+	{
+		help();
+	}		
+	else return -1;
 	return 0;
 }
 
@@ -234,7 +255,8 @@ int executeOtherCMD(struct command_struct * cmd, HANDLE ** handles)
 		printf( "CreateProcess is failed (%d)\n", GetLastError());
 		return -1;
 	}
-	WaitForSingleObject(ProcInf.hProcess, 400);
+	addHandleToHProccesses(ProcInf.hProcess);
+	//WaitForSingleObject(ProcInf.hProcess, 400);
 	if (handles)
 	{
 		if (handles[INPUT_REDIR])
@@ -256,7 +278,8 @@ int executeOtherCMD(struct command_struct * cmd, HANDLE ** handles)
 			handles[ERROR_REDIR];
 		}
 	}
-	CloseHandle(ProcInf.hProcess);
+	
+	//CloseHandle(ProcInf.hProcess);
 	free(cmdLine);
 	return 0;
 }
@@ -357,7 +380,7 @@ int excecuteList(struct list_struct *list)
 					printf ("\nNo memory");
 					return -1;
 				}
-				*handles[OUTPUT_REDIR] = CreateFile(list->redirection->outputClearFile, GENERIC_WRITE, FILE_SHARE_WRITE, &secAtr, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+				*handles[OUTPUT_REDIR] = CreateFile(list->redirection->outputClearFile, GENERIC_WRITE, FILE_SHARE_WRITE, &secAtr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 				if (*handles[OUTPUT_REDIR] == INVALID_HANDLE_VALUE)
 				{
 					printf("\nError of opening output redirection file %d", GetLastError());
@@ -449,6 +472,7 @@ int excecuteList(struct list_struct *list)
 			return -1;
 		}
 	}
+	WaitForMultipleProcceses();
 	return 0;
 }
 
