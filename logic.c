@@ -113,17 +113,27 @@ int execute(struct list_struct* list)
 		} else if (!strcmp(list->head->toDo->name, CMD_NAME))
 		{
 			if (excecuteList (list))
+			{			
+				freeListStruct(*list);
+				free(list);
 				return -1;
-			freeListStruct(*list);
-			free(list);
+			} else {
+				freeListStruct(*list);
+				free(list);
+			}
 		}
 
 	} else	
 	{
 		if (excecuteList (list))
-			return -1;
-		freeListStruct(*list);
+		{			
+			freeListStruct(*list);
 			free(list);
+			return -1;
+		} else {
+			freeListStruct(*list);
+			free(list);
+		}
 	}
 
 	return 0;

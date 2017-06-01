@@ -124,3 +124,57 @@ exit
 echo Julia is cool > output.txt
 cat output.txt 
 exit
+rn
+rm lemon.exe
+ls
+ls -al | grep lemon
+help
+sleep 1000
+kskx
+cat logic.o
+cd ..
+ls
+ls -l
+ls -l
+ls -l | readline
+ls -l | grep readline
+ls -l
+ls -l | grep flex
+Quit
+exit
+ls
+cd ..
+ls -l 
+chcp
+exit
+ls -l
+ls -l
+exit
+ls -l
+sleep 1000 | cd C:
+Julai
+exit
+skal
+cd l
+echo love
+exit
+aklsk
+exit
+echo love
+jkjk
+ixit
+exit
+.git Makefile bricks.c bricks.h bricks.o definitions.h flexglobal.h history5.dll input.txt lemon.c lemon.exe lempar.c log.txt logic.c logic.h logic.o main.c main.o output.txt parser.h parser.o parser.out parser.y readline readline5.dll scanner.l scanner.o scanner.yy.c scanner.yy.h shell.exe shell_history.txt shell_system.c shell_system.h shell_system.o  
+ls
+eit
+exit
+cd ..
+echo love
+a = 10
+echo $(a)
+for from 0 until 10 ; do echo love && sleep 1000
+for from 0 until 10 ; do echo love && sleep 1000
+echo $(a)
+for from 0 until 10 ; do echo love && sleep 1000
+for from 0 until 10 ; do echo love && sleep 1000
+exit
