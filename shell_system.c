@@ -18,7 +18,7 @@ char *system_commands_shell[] = {
 	"sleep",
 	"exit",
 	"help",
-	"clear"
+	"clear",
 	"alias"
 };
 void getHistoryFilePath(char* buffer, int size)
@@ -80,6 +80,7 @@ Check name of command at **system_commands_shell; If it should be excecuted at c
 BOOL isMountedCommand(struct command_struct cmd)
 {
 	int i;
+	printf("\nIs mounted %s", cmd.nameOfCmd);
 	for (i = 0; i < AMOUNT_OF_SYSTEM_CMDS; i++)
 		if (!strcmp(system_commands_shell[i], cmd.nameOfCmd))
 			return TRUE;

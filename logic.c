@@ -363,15 +363,18 @@ int excecuteList(struct list_struct *list)
 
 	for (i = 0; i < list->size; i++)
 	{
+		printf("\n1");
 		if (iter)
 		{
 			if (isMountedCommand(*iter->toDo->cmd.command))
 			{
+				printf("\nMounted");
 				if (executeBuildInCMD(iter->toDo->cmd.command->nameOfCmd, iter->toDo->cmd.command->args))
 					return -1;
 				iter = iter->next;
 				continue;
 			}
+			printf("\nNOT Mounted");
 			if (0 == i && list->redirection && list->redirection->inputFile)
 			{
 				if (!(handles[INPUT_REDIR] = (HANDLE*)malloc(sizeof(HANDLE))))

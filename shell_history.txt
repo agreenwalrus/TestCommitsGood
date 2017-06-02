@@ -264,3 +264,23 @@ echo love
 echo love
 echo love
 echo love
+echo love
+echo lo
+echo l
+echo love
+alias mycmd
+mycmd love
+exit
+alias mycmd = "echo"
+mycmd love
+echo love
+ALIAS julia = "cd .."
+julia
+alias md = "mkdir"
+md Lolets
+ls
+cd Lolets/
+ls
+clear
+echo Julia is cool
+exit

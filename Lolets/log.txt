@@ -1,0 +1,104 @@
+
+Parser state: Input FILENAME
+
+Parser state: Shift 34
+
+Parser state: Stack: FILENAME
+
+Parser state: Input FILENAME
+
+Parser state: Reduce [command ::= FILENAME].
+
+Parser state: Shift 6
+
+Parser state: Stack: command
+
+Parser state: Shift 32
+
+Parser state: Stack: command FILENAME
+
+Parser state: Input FILENAME
+
+Parser state: Reduce [argument ::= FILENAME].
+
+Parser state: Shift 37
+
+Parser state: Stack: command argument
+
+Parser state: Reduce [argument_list ::= argument].
+
+Parser state: Shift 10
+
+Parser state: Stack: command argument_list
+
+Parser state: Shift 32
+
+Parser state: Stack: command argument_list FILENAME
+
+Parser state: Input FILENAME
+
+Parser state: Reduce [argument ::= FILENAME].
+
+Parser state: Shift 38
+
+Parser state: Stack: command argument_list argument
+
+Parser state: Reduce [argument_list ::= argument_list argument].
+
+Parser state: Shift 10
+
+Parser state: Stack: command argument_list
+
+Parser state: Shift 32
+
+Parser state: Stack: command argument_list FILENAME
+
+Parser state: Input $
+
+Parser state: Reduce [argument ::= FILENAME].
+
+Parser state: Shift 38
+
+Parser state: Stack: command argument_list argument
+
+Parser state: Reduce [argument_list ::= argument_list argument].
+
+Parser state: Shift 10
+
+Parser state: Stack: command argument_list
+
+Parser state: Reduce [command_line ::= command argument_list].
+
+Parser state: Shift 39
+
+Parser state: Stack: command_line
+
+Parser state: Reduce [command_line_list ::= command_line].
+
+Parser state: Shift 11
+
+Parser state: Stack: command_line_list
+
+Parser state: Reduce [input ::= command_line_list].
+
+Parser state: Shift 61
+
+Parser state: Stack: input
+
+Parser state: Reduce [result ::= input].
+
+Parser state: Shift 68
+
+Parser state: Stack: result
+
+Parser state: Reduce [program ::= result].
+
+Parser state: Shift 90
+
+Parser state: Stack: program
+
+Parser state: Reduce [program_shell ::= program].
+
+Parser state: Accept!
+
+Parser state: Popping $
