@@ -2,15 +2,21 @@
 Here're described rules for scanning char buffers.
 */
 %{
-    #include "parser.h"
-	#include "flexglobal.h"
 	#include <string.h>
 	#include <stdlib.h>
-	#include <string.h>
+    #include "parser.h"
+	#include "shell_system.h"
+	#include "flexglobal.h"
+
 	#define LS_CHANGE "dir"
 	#define GREP_CHANGE "findstr"
 	#define PS_CHANGE "tasklist"
 	#define KILL_CHANGE "taskkill"
+	#define DIFF_CHANGE "fc"
+	#define MAN_CHANGE	"help"
+	#define INFO_CHANGE	"help"
+	#define LESS_CHANGE	"more"
+	#define FREE_CHANGE	"mem"
 %}
 
 %option reentrant
@@ -24,6 +30,13 @@ Here're described rules for scanning char buffers.
 
 %%
 
+"alias"					{ return ALIAS; }
+"ALIAS"					{ return ALIAS; }
+"free"					{ yylval.charValue = strdup(FREE_CHANGE); return FILENAME; }
+"less"					{ yylval.charValue = strdup(LESS_CHANGE); return FILENAME; }
+"info"					{ yylval.charValue = strdup(INFO_CHANGE); return FILENAME; }
+"man"					{ yylval.charValue = strdup(MAN_CHANGE); return FILENAME; }
+"diff"					{ yylval.charValue = strdup(DIFF_CHANGE); return FILENAME; }
 "ls"					{ yylval.charValue = strdup(LS_CHANGE); return FILENAME;  }
 "grep"					{ yylval.charValue = strdup(GREP_CHANGE); return FILENAME; }
 "ps"					{ yylval.charValue = strdup(PS_CHANGE); return FILENAME; }
@@ -64,7 +77,8 @@ Here're described rules for scanning char buffers.
 [ \t\r\n]                 { }
 
 "-"?[1-9][0-9]*			{
-	yylval.charValue = strdup(yytext);	
+	
+	yylval.charValue = strdup(yytext);
 	return DIGIT; 
 }
 
@@ -73,8 +87,12 @@ Here're described rules for scanning char buffers.
 	return DIGIT; 
 }
 
-([/a-zA-Z0-9_:\.\-]+("\\\ ")*("\\\"")*("\\\#")*("\\\'")*)+       { 
-	yylval.charValue = strdup(yytext);
+([/a-zA-Z0-9_:\.\-]+("\\\ ")*("\\\"")*("\\\#")*("\\\'")*)+       {
+	char *temp;
+	if (!(temp = getAlias(yytext)))
+		yylval.charValue = strdup(yytext);
+	else yylval.charValue = temp;
+	printf("Value: %s", yylval.charValue);
 	return FILENAME; 
 }	
 

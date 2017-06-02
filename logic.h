@@ -3,6 +3,7 @@
 
 #include <Windows.h>
 #include <stdio.h>
+#include <conio.h>
 
 #include "shell_system.h"
 #include "bricks.h"

@@ -178,3 +178,89 @@ echo $(a)
 for from 0 until 10 ; do echo love && sleep 1000
 for from 0 until 10 ; do echo love && sleep 1000
 exit
+ls | sort
+ls
+sort <input.txt  >output.txt 
+cat output.txt 
+cat /reverse  output.txt 
+cat output.txt 
+sort /reverse  <input.txt  >output.txt 
+cat output.txt 
+exit
+vi -R output.txt 
+edit output.txt 
+exit
+edit output.txt 
+edit
+edit
+exit
+fc output.txt  input.txt 
+exit
+rn output1.txt  output.txt 
+exit
+ren output1.txt  output.txt 
+exit
+mkdir l
+ls
+mv k ..
+ls
+cp Makefile  ..
+cd ..
+ls
+cd ShellForWindows-master/
+cls
+clear
+clear
+date
+gedit output.txt 
+edit output.txt 
+dif Makefile  output.txt 
+fc Makefile  output.txt 
+scanner.l
+ls -al | find Make
+ls -al | find "Make"
+less output.txt 
+more output.txt 
+more output.txt 
+less output.txt 
+exit
+more output.txt 
+exit
+mv output1.txt output.txt 
+ls
+pwd
+chdir
+exit
+chdir
+pwd
+date
+time
+mem
+free
+exit
+clear
+exit
+clear
+exit
+clear
+help
+sleep
+sleep 1000
+sleep 1000
+for from 0 until 10 ; do echo Julia is cool && sleep 1000
+for from 0 until 10 ; do echo Julia is cool && sleep 1000 &
+for from 0 until 10 ; do echo Julia is cool && sleep 1000 &echo Julia is
+for from 0 until 10 ; do echo Julia is cool && sleep 1000 &
+for from 0 until 10 ; do echo JULIA && sleep 2000 &
+echo ALERA
+for from 0 until 10 ; do echo JULIA && sleep 2000 &
+for from 0 until 10 ; do echo JULIA && sleep 2000 &
+for from 0 until 10 ; do echo JULIA && sleep 2000 
+exit
+for from 0 until 10 ; do sleep 1000
+alias myCom = "echo"
+myCom love
+echo love
+echo love
+echo love
+echo love

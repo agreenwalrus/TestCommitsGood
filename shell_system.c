@@ -9,11 +9,17 @@ HANDLE *hProccesses;
 int amountOfProc;
 int maxAmountOfHProc;
 
+struct variable_struct* alias_array;
+int alias_array_size;
+int amount_of_alias_variables;
+
 char *system_commands_shell[] = {
 	"cd",
 	"sleep",
 	"exit",
-	"help"
+	"help",
+	"clear"
+	"alias"
 };
 void getHistoryFilePath(char* buffer, int size)
 {
@@ -111,6 +117,7 @@ returns:
 
 int initShell()
 {
+	SetConsoleTitle(CONSOLE_NAME);
 	if (!(global_variable_array = (struct variable_struct*)(malloc(START_SIZE * sizeof(struct variable_struct)))))
 	{
 		printf("\nError of initialisation shell");
@@ -126,6 +133,14 @@ int initShell()
 	}
 	amountOfProc = 0;
 	maxAmountOfHProc = START_SIZE;
+
+	if (!(alias_array = (struct variable_struct*)(malloc(START_SIZE * sizeof(struct variable_struct)))))
+	{
+		printf("\nError of initialisation shell");
+		return -1;
+	}
+	alias_array_size = START_SIZE;
+	amount_of_alias_variables = 0;
 
 	return 0;
 }
@@ -154,6 +169,30 @@ int reallocHProccesses()
 
 	return 0;
 
+}
+
+/*
+realloc memory of alias_array
+*/
+
+int reallocAliasArray()
+{
+	int i;
+	struct variable_struct* temp;
+	
+	if(!(temp = (struct variable_struct*)malloc((global_variable_array_size + START_SIZE) * sizeof(struct variable_struct))))
+	{
+		printf("\nError of reallocation in reallocGlobalVariableArray");
+		return -1;
+	}
+	for(i = 0; i < alias_array_size; i++)
+		temp[i] = alias_array[i];
+	
+	free(alias_array);
+	alias_array = temp;	
+	alias_array_size += START_SIZE;
+
+	return 0;
 }
 
 /*
@@ -192,6 +231,13 @@ void destroyShell()
 		freeMemoryForVariable(global_variable_array[i]);
 	
 	free(global_variable_array);
+	free(hProccesses);
+
+	
+	for(i = 0; i < amount_of_alias_variables; i++)
+		freeMemoryForVariable(alias_array[i]);
+
+	free(alias_array);
 }
 
 /*
@@ -205,6 +251,17 @@ void freeMemoryForVariable(struct variable_struct variable)
 	if (variable.varValue)
 		free(variable.varValue);
 	//free(variable);
+}
+
+char* getAlias(char* aliasName)
+{
+	int i;
+	for (i = 0; i < amount_of_alias_variables; i++)
+		if (!strcmp(alias_array[i].varName, aliasName))
+			if (alias_array[i].varValue)
+				return strdup(alias_array[i].varValue);
+			else return NULL;
+	return NULL;
 }
 
 
@@ -233,4 +290,50 @@ int addVariable(struct variable_struct newVariable)
 		global_variable_array[i] = newVariable;
 	amount_of_global_variables += 1;
 	return 0;
+}
+
+
+/*
+add new Alias
+*/
+int addAlias(struct variable_struct newVariable)
+{
+	int i;
+	printf("\naddAlias %s %s %d", newVariable.varName, newVariable.varValue, amount_of_alias_variables);
+	
+	if (amount_of_alias_variables == alias_array_size)
+		if (reallocAliasArray())
+			return -1;
+	for(i = 0; i < amount_of_alias_variables; i++)
+	{
+		if (!strcmp(newVariable.varName, alias_array[i].varName))
+		{
+			freeMemoryForVariable(alias_array[i]);
+			alias_array[i].varName = newVariable.varName;
+			alias_array[i].varValue = newVariable.varValue;
+			return 0;
+		}
+	}
+	if (i == amount_of_alias_variables)
+		alias_array[i] = newVariable;
+	amount_of_alias_variables += 1;
+	return 0;
+}
+
+void deleteAlias(char* aliasName)
+{
+	int i, j;
+	for (i = 0; i < amount_of_alias_variables; i++)
+		if (!strcmp(alias_array[i].varName, aliasName))
+		{
+			if (alias_array[i].varValue)
+				free(alias_array[i].varValue);
+			if (alias_array[i].varName)
+				free(alias_array[i].varName);
+
+			for (j = i; j < amount_of_alias_variables - 1; j++)
+				alias_array[j] = alias_array[j + 1];
+
+			amount_of_alias_variables--;
+		}
 }

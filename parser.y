@@ -198,6 +198,10 @@ result(res) ::= variable_declaration . {
 	res = NULL;
 }
 
+result(res) ::= alias_declaration . {
+	res = NULL;
+}
+
 result(res) ::= for_cycle(cycle) . { 
 	res = (struct list_struct*) malloc (sizeof(struct list_struct));
 	res->redirection = NULL;
@@ -376,6 +380,17 @@ command(cmd) ::= ARGUMENT(name) .	{
 	cmd->nameOfCmd = name;
 	cmd->args = NULL;
 	name = NULL;
+}
+
+//ALIAS_DECLARATION
+
+alias_declaration ::= ALIAS variable(name) EQU ARGUMENT(arg) . {
+	struct variable_struct var;
+	var.varName = name;
+	var.varValue = arg;
+	addAlias(var);
+	name = NULL;
+	arg = NULL;
 }
 
 //VARIABLE_DECLARATION

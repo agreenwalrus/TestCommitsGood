@@ -51,8 +51,8 @@ void intrToTyping(char *result, int size)
 	{
 		printf ("Error of getting current directory %d\n", GetLastError());
 		result[0] = '\n';
-		result[1] = " ";
-		result[2] = "\0";
+		result[1] = ' ';
+		result[2] = '\0';
 		return;
 	}
 	result[0] = '\n';
@@ -206,6 +206,9 @@ int executeBuildInCMD(char *cmdName, char *args)
 	} else if (!strcmp(cmdName, "help"))
 	{
 		help();
+	} else if (!strcmp(cmdName, "clear"))
+	{
+		cleanScrean();
 	}		
 	else return -1;
 	return 0;
@@ -285,7 +288,7 @@ int executeOtherCMD(struct command_struct * cmd, HANDLE ** handles)
 		{
 			CloseHandle(*handles[ERROR_REDIR]);
 			free (handles[ERROR_REDIR]);
-			handles[ERROR_REDIR];
+			handles[ERROR_REDIR] = NULL;
 		}
 	}
 	
@@ -484,6 +487,15 @@ int excecuteList(struct list_struct *list)
 	}
 	WaitForMultipleProcceses();
 	return 0;
+}
+
+/*
+Mounted clear
+*/
+
+void cleanScrean()
+{
+	if (system("CLS")) system("clear");
 }
 
 /*
