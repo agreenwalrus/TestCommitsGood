@@ -1,5 +1,8 @@
 #include "logic.h"
 
+
+
+
 void help()
 {
 	printf ("\n------------------------------------------ HELP ----------------------------------------------------");
@@ -29,13 +32,13 @@ void printIntroduction()
 	printf ("Opensource project Shell for Windows.\nCreated by the sudent of BSUIR 550502\nJulia Runova.\n");
 	if (!GetUserName(usrName, &buf_size))
 	{
-		printf ("Error of getting name of user %d\n", GetLastError());
+		printf ("Error of getting name of user %d\n", (int)GetLastError());
 		return;
 	}
 	buf_size = (DWORD) BUFSIZ;
 	if (!GetComputerName(cmpName, &buf_size))
 	{
-		printf ("Error of getting name of computer %d\n", GetLastError());
+		printf ("Error of getting name of computer %d\n", (int)GetLastError());
 		return;
 	}
 	printf("\n[%s]@[%s]\n", usrName, cmpName);
@@ -49,7 +52,7 @@ void intrToTyping(char *result, int size)
 	int len;
 	if (!GetCurrentDirectory(size - 1, &result[1]))
 	{
-		printf ("Error of getting current directory %d\n", GetLastError());
+		printf ("Error of getting current directory %d\n", (int)GetLastError());
 		result[0] = '\n';
 		result[1] = ' ';
 		result[2] = '\0';
@@ -265,7 +268,7 @@ int executeOtherCMD(struct command_struct * cmd, HANDLE ** handles)
 						&StartupInfo,					// параметры окна нового процесса
 						&ProcInf))						// в которую будут записаны идентификаторы и дескрипторы нового процесса
 	{
-		printf( "CreateProcess is failed (%d)\n", GetLastError());
+		printf( "CreateProcess is failed (%d)\n", (int)GetLastError());
 		return -1;
 	}
 	addHandleToHProccesses(ProcInf.hProcess);
@@ -385,7 +388,7 @@ int excecuteList(struct list_struct *list)
 				*handles[INPUT_REDIR] = CreateFile(list->redirection->inputFile, GENERIC_READ, FILE_SHARE_READ, &secAtr, OPEN_EXISTING , FILE_ATTRIBUTE_NORMAL, NULL);
 				if (*handles[INPUT_REDIR] == INVALID_HANDLE_VALUE)
 				{
-					printf("\nError of opening input redirection file %s %d", list->redirection->inputFile, GetLastError());
+					printf("\nError of opening input redirection file %s %d", list->redirection->inputFile, (int)GetLastError());
 					return -1;
 				}
 			}
@@ -399,7 +402,7 @@ int excecuteList(struct list_struct *list)
 				*handles[OUTPUT_REDIR] = CreateFile(list->redirection->outputClearFile, GENERIC_WRITE, FILE_SHARE_WRITE, &secAtr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 				if (*handles[OUTPUT_REDIR] == INVALID_HANDLE_VALUE)
 				{
-					printf("\nError of opening output redirection file %d", GetLastError());
+					printf("\nError of opening output redirection file %d", (int)GetLastError());
 					return -1;
 				}
 			}
@@ -413,7 +416,7 @@ int excecuteList(struct list_struct *list)
 				*handles[ERROR_REDIR] = CreateFile(list->redirection->errorFile, GENERIC_WRITE, FILE_SHARE_WRITE, &secAtr, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 				if (*handles[ERROR_REDIR] == INVALID_HANDLE_VALUE)
 				{
-					printf("\nError of opening error redirection file %d", GetLastError());
+					printf("\nError of opening error redirection file %d", (int)GetLastError());
 					return -1;
 				}
 			}
@@ -422,7 +425,7 @@ int excecuteList(struct list_struct *list)
 			{
 				if (!SetHandleInformation(*handles[RESERVED], 0, HANDLE_FLAG_INHERIT))
 				{
-					printf("\nError SetHandleInformation %d", GetLastError());
+					printf("\nError SetHandleInformation %d", (int)GetLastError());
 					return -1;
 				}
 				handles[INPUT_REDIR] = handles[RESERVED];
@@ -450,7 +453,7 @@ int excecuteList(struct list_struct *list)
 				{
 					if (!CreatePipe(&hPipeR, &hPipeW, &secAtr, 0))
 					{
-						printf("\nError of creation pipe %d", GetLastError());
+						printf("\nError of creation pipe %d", (int)GetLastError());
 						return 0;
 					}
 
@@ -468,7 +471,7 @@ int excecuteList(struct list_struct *list)
 
 					if (!SetHandleInformation(hPipeW, 0, HANDLE_FLAG_INHERIT || !SetHandleInformation(hPipeR, HANDLE_FLAG_INHERIT, 0)))
 					{
-						printf("\nError SetHandleInformation %d", GetLastError());
+						printf("\nError SetHandleInformation %d", (int)GetLastError());
 						return -1;
 					}
 

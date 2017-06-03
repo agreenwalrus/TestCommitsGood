@@ -11,7 +11,6 @@
 #include "shell_system.h"
 #include "bricks.h"
 #include "logic.h"
-#include "readline/rlstdc.h"
 #include "readline/readline.h"
 #include "readline/history.h"
 
@@ -93,10 +92,12 @@ int shell(char *commandLine)
 int main(int argc, char** argv) {
 	
 	char *buffer = NULL, introduction[BUF_SIZE + BUF_SIZE + 1], histotyFile[BUF_SIZE];
+	buffer = readline("Julia: ");
 	//char* history_path = get_history_path();
     
-	using_history ();
 	//initialize_readline ();
+	using_history ();
+	
 	getHistoryFilePath(histotyFile, BUF_SIZE);
 	printf("\n%s", histotyFile);
 	initShell();	
@@ -112,8 +113,9 @@ int main(int argc, char** argv) {
 
 		//fgets(buffer, BUF_SIZE, stdin);
 		buffer = readline(introduction);
+		//gets(&buffer);
 		printf("\nbuf: %s1 %d", buffer, strlen(buffer));
-		if (buffer && *buffer)
+		if (buffer)// && *buffer)
 		{
 			add_history(buffer);
 			write_history(histotyFile);
@@ -123,6 +125,7 @@ int main(int argc, char** argv) {
 			break;
 	} while (! shell(buffer));
 	
+	free(buffer);
 	destroyShell();
 	getchar();
 	

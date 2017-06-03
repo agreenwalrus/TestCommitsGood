@@ -30,6 +30,7 @@ Here're described rules for scanning char buffers.
 
 %%
 
+"unalias"				{ return UNALIAS; }	
 "alias"					{ return ALIAS; }
 "ALIAS"					{ return ALIAS; }
 "free"					{ yylval.charValue = strdup(FREE_CHANGE); return FILENAME; }
@@ -45,18 +46,13 @@ Here're described rules for scanning char buffers.
 "if"					{ return IF; }
 "then"					{ return THEN; }
 "else"					{ return ELSE; }
-"fi"					{ return FI; }
 
-"for"					{ return FOR; }
 "do"					{ return DO; }
 "from"					{ return FROM; }
 "until"					{ return UNTIL; }
 
-"while"					{ return WHILE; }
 
-"$("					{ return DOLLARLPAREN; }
-")"						{ return RPAREN; }
-";"						{ return SEMICOLON; }
+
 "="						{ return EQU; }
 "=="					{ return EQUEQU; }
 "["                  	{ return LBRACKET; }
@@ -85,6 +81,12 @@ Here're described rules for scanning char buffers.
 "0"	{
 	yylval.charValue = strdup(yytext);	
 	return DIGIT; 
+}
+
+"$"[a-zA-Z]+      {
+	yylval.charValue = strdup(&yytext[1]);
+	printf("Value: %s", yylval.charValue);
+	return VAR_NAME; 
 }
 
 ([/a-zA-Z0-9_:\.\-]+("\\\ ")*("\\\"")*("\\\#")*("\\\'")*)+       {

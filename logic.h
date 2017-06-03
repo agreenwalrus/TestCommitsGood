@@ -15,6 +15,7 @@
 
 #define INTROD_SIZE BUF_SIZE + BUF_SIZE + 1
 
+
 void printIntroduction();
 void intrToTyping(char *, int);
 int execute(struct list_struct* );
@@ -23,10 +24,11 @@ DWORD WINAPI executeForCycle(void* );
 int executeListWithFor(struct list_struct* list);
 int executeOtherCMD(struct command_struct *, HANDLE **);
 int executeBuildInCMD(char *cmdName, char *args);
-int executeList(struct list_struct *);
+int excecuteList(struct list_struct *);
 void changeDirectory (char *);
 void sleep_shell(int);
 void help();
+void cleanScrean();
 
 
 

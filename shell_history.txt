@@ -1,286 +1,129 @@
-cd
-cd lol
-exit
-exit
-cd ..
-cD:
-dh
-for from 1 until 10 ; do echo Julia && sleep 100
-cd ..
-cd ..
-cd Julia
-exit
-a = 10
-ech0 $(a)
-echo $(a)
-echo "a = " $(a)
-echo "a =" $(a)
-exit
-less input
-less input.txt
-ls -al | grep Make
-ls -al
-exit
-dir > output.txt
-a = 10
-echo $(a)
-for from 0 until $(a) ; do echo Julia && sleep 1000
-for from 0 until 10 ; do echo Julia && sleep 1000
-for from 0 until 10 ; do echo Julia && sleep 1000 &
-cd ..
-cd ..
-exit
-for from $(a) until 10 ; do echo lo
-a = 10
-for from 0 until $(a); do echo love
-for from 0 until $(a) ; do echo love
-exit
-for from 0 until $(a) ; do echo love
-for from 0 until $(a) ; do echo love
-exit
-for from 0 until $(a) ; do echo love
-for from 0 until $(a) ; do echo love
-for from 0 until $(a) ; do echo love
-a = 10
-echo $(a)
-for from 0 until $(a) ; do echo love
-for from 0 until $(a) ; do echo love
-b = 10
-exit
-àþK
-eit
-exit
-for from 0 u­il $(a) ; do echo love
-a = 10
-for from 0 until $(a) ; do echo love
-for from 0 until $(a) ; do echo love
-for from 0 until $(a) ; do echo love && sleeep 1000
-or from 0 until $(a) ; do echo love && sleep 1000
-for from 0 until $(a) ; do echo love && sleep 1000
-echo love
-sleep 1000
-ls
-ls -a
-ls -l
-ls -v
-ls -l
-ls -l | .o
-ls -l | grep .o
-ls -l | grep log
-ls -l | grep 20:30
-ls -l | grep 20:23
-ls -l | grep 20:30
-ls -l 
-exit
-for from 0 until $(a) ; do echo love && sleep 1000
-for from 0 until $(a) ; do echo love && sleep 1000
-for from 0 until $(a) ; do echo love && sleep 1000
-for from 0 until $(a) ; do echo love && sleep 1000
-for from 0 until $(a) ; do echo love && sleep 1000
-for from 0 until $(a) ; do echo love && sleep 1000
-a = 10
-for from 0 until $(a) ; do echo love && sleep 1000
-a = pop
-for from 0 until $(a) ; do echo love && sleep 1000
-exit
-cat Makefile
-C:\emu8086\emu8086
-C:\emu8086\emu8086.exe
-C:/emu8086/emu8086.exe
-make
-shQuit
-make
-C:/emu8086/emu8086.exe
-echo love
-make
-echo love
-echo love
-echo love && sleep 1000
-C:/emu8086/emu8086
-echo love
-for from 1 until 10 ; do echo love && sleep 10
 for from 1 until 10 ; do echo love && sleep 1000
-for from 1 until 10 ; do echo love && echo Julia && sleep 1000
-ls -al | grep Make
-help
+for from 1 until 10 ; do echo love && sleep 1000 &
+dwdwdwdwdw
+echo love
 exit
-help
+for from 1 until 10 ; do echo love && sleep 1000 &
+for from 1 until 10 ; do echo love && sleep 1000 &
+for from 1 until 10 ; do echo love && sleep 1000 &
+for from 1 until 10 ; do echo love && sleep 1000 
 exit
-help
+less output.txt 
+more output.txt 
+more output.txt 
+alias e = "echo"
+e love
+e love
+e love
 exit
-help
+clean
+clear
+ls -al | grep log
+ls -al | grep log | grep .h
+ls -al | grep log | grep .h
 exit
-exit
-for from 0 until $(a); do 
-for from 0 until $(a) ; do : 
-for from 0 until $(a) ; do echo love
-a = 10
-for from 0 until $(a) ; do echo love
-echo love > output.txt
-cat output.txt 
-shell
-exit
-exit
+ls -al | grep log | grep .h
+ls -al | grep log
+#
+Julia
+echo Julia is cool
+vi
+vim
 echo Julia is cool > output.txt
 cat output.txt 
+cat input
+cat input.txt 
+cat .
+cat ./
+echo < input.txt 
+echo < input.txt > output.txt 
+cat output.txt 
+man
+info
+tasklist
+tasklist | grep chrom
+mem
+dif output.txt  input.txt 
+diff output.txt  input.txt 
+diff input.txt input.txt 
+a = love
+echo $(a)
 exit
-rn
-rm lemon.exe
-ls
-ls -al | grep lemon
-help
-sleep 1000
-kskx
-cat logic.o
-cd ..
-ls
-ls -l
-ls -l
-ls -l | readline
-ls -l | grep readline
-ls -l
-ls -l | grep flex
-Quit
+from 1 until 10 do echo Julia is cool && sleep 1000
+a = 1
+a++
+a ++
+alias a = "echo"
+&(a)
 exit
-ls
-cd ..
-ls -l 
-chcp
+a = 10
+alias a = "echo"
+echo $(a)
 exit
-ls -l
-ls -l
-exit
-ls -l
-sleep 1000 | cd C:
-Julai
-exit
-skal
-cd l
-echo love
-exit
-aklsk
-exit
-echo love
-jkjk
-ixit
-exit
-.git Makefile bricks.c bricks.h bricks.o definitions.h flexglobal.h history5.dll input.txt lemon.c lemon.exe lempar.c log.txt logic.c logic.h logic.o main.c main.o output.txt parser.h parser.o parser.out parser.y readline readline5.dll scanner.l scanner.o scanner.yy.c scanner.yy.h shell.exe shell_history.txt shell_system.c shell_system.h shell_system.o  
-ls
-eit
-exit
-cd ..
-echo love
 a = 10
 echo $(a)
-for from 0 until 10 ; do echo love && sleep 1000
-for from 0 until 10 ; do echo love && sleep 1000
+alias a = "echo"
+a $(a)
+exit
+a = 10
 echo $(a)
-for from 0 until 10 ; do echo love && sleep 1000
-for from 0 until 10 ; do echo love && sleep 1000
+alias a = "echo"
+a $(a)
+echo $(a)
 exit
-ls | sort
-ls
-sort <input.txt  >output.txt 
-cat output.txt 
-cat /reverse  output.txt 
-cat output.txt 
-sort /reverse  <input.txt  >output.txt 
-cat output.txt 
+a = 10
+echo $(a)
+echo $(a)
+b = 5
+alias e = "echo"
+c = 1
+e $(a)
+alias a = "echo"
+d = 0
+echo $(a)
 exit
-vi -R output.txt 
-edit output.txt 
+alias a = "echo"
+a love
+a = 1
+echo $(a)
+a love
+a $(a)
+alias a = "lol"
+a
+a $(a)
 exit
-edit output.txt 
-edit
-edit
+a = Julia is cool
+echo $(a)
+alias a = "echo"
+a kok
+a $(a)
+exit'
 exit
-fc output.txt  input.txt 
+a = 10
+echo &a
+echo $a
 exit
-rn output1.txt  output.txt 
+a = 10
+echo $a
+echo $a
 exit
-ren output1.txt  output.txt 
+a = 10
+echo $a
+alias a = "echo"
+echo $a
+a $a
+alias a = "pwd"
+a
 exit
-mkdir l
-ls
-mv k ..
-ls
-cp Makefile  ..
-cd ..
-ls
-cd ShellForWindows-master/
-cls
-clear
-clear
-date
-gedit output.txt 
-edit output.txt 
-dif Makefile  output.txt 
-fc Makefile  output.txt 
-scanner.l
-ls -al | find Make
-ls -al | find "Make"
-less output.txt 
-more output.txt 
-more output.txt 
-less output.txt 
-exit
-more output.txt 
-exit
-mv output1.txt output.txt 
-ls
-pwd
-chdir
-exit
-chdir
-pwd
-date
-time
-mem
-free
-exit
-clear
-exit
-clear
-exit
-clear
-help
-sleep
-sleep 1000
-sleep 1000
-for from 0 until 10 ; do echo Julia is cool && sleep 1000
-for from 0 until 10 ; do echo Julia is cool && sleep 1000 &
-for from 0 until 10 ; do echo Julia is cool && sleep 1000 &echo Julia is
-for from 0 until 10 ; do echo Julia is cool && sleep 1000 &
-for from 0 until 10 ; do echo JULIA && sleep 2000 &
-echo ALERA
-for from 0 until 10 ; do echo JULIA && sleep 2000 &
-for from 0 until 10 ; do echo JULIA && sleep 2000 &
-for from 0 until 10 ; do echo JULIA && sleep 2000 
-exit
-for from 0 until 10 ; do sleep 1000
-alias myCom = "echo"
-myCom love
-echo love
-echo love
-echo love
-echo love
-echo love
-echo lo
-echo l
-echo love
-alias mycmd
-mycmd love
-exit
-alias mycmd = "echo"
-mycmd love
-echo love
-ALIAS julia = "cd .."
-julia
-alias md = "mkdir"
-md Lolets
-ls
-cd Lolets/
-ls
-clear
-echo Julia is cool
+alias a = "pwd"
+a
+alias a = "echo"
+echo 1
+alias "a" = "echo"
+a
+echo
+alias b = ".."
+unalias "a"
+a
+alias c = "echo"
 exit

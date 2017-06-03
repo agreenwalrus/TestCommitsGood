@@ -25,7 +25,7 @@ void getHistoryFilePath(char* buffer, int size)
 {
 	if (!GetCurrentDirectory(size, buffer))
 	{
-		printf ("Error of getting current directory %d\n", GetLastError());
+		printf ("Error of getting current directory %d\n", (int)GetLastError());
 		return;
 	}
 	printf("%s", buffer);
@@ -102,7 +102,10 @@ char* findVariable (char *varName)
 	for (i = 0; i < amount_of_global_variables; i++)
 		if (!strcmp(varName, global_variable_array[i].varName))
 			if (global_variable_array[i].varValue)
+			{
+				printf("\nfindVariable %s %s", varName, global_variable_array[i].varValue);
 				return strdup(global_variable_array[i].varValue);
+			}
 	return NULL;
 }
 
@@ -129,7 +132,7 @@ int initShell()
 
 	if (!(hProccesses = (HANDLE*) malloc(sizeof(HANDLE) * START_SIZE)))
 	{
-		printf ("\nError of allocation memory for hProccesses (%x)", GetLastError());
+		printf ("\nError of allocation memory for hProccesses (%x)", (int)GetLastError());
 		return -1;
 	}
 	amountOfProc = 0;
@@ -181,9 +184,9 @@ int reallocAliasArray()
 	int i;
 	struct variable_struct* temp;
 	
-	if(!(temp = (struct variable_struct*)malloc((global_variable_array_size + START_SIZE) * sizeof(struct variable_struct))))
+	if(!(temp = (struct variable_struct*)malloc((alias_array_size + START_SIZE) * sizeof(struct variable_struct))))
 	{
-		printf("\nError of reallocation in reallocGlobalVariableArray");
+		printf("\nError of reallocation in reallocAliasArray");
 		return -1;
 	}
 	for(i = 0; i < alias_array_size; i++)
@@ -259,9 +262,11 @@ char* getAlias(char* aliasName)
 	int i;
 	for (i = 0; i < amount_of_alias_variables; i++)
 		if (!strcmp(alias_array[i].varName, aliasName))
+		{			
 			if (alias_array[i].varValue)
 				return strdup(alias_array[i].varValue);
 			else return NULL;
+		}
 	return NULL;
 }
 

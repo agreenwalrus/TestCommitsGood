@@ -50,7 +50,7 @@ Grammar rules for shell.
 %destructor redirection { if($$) free($$); }
 %destructor argument_list { if($$) free($$); }
 %destructor argument { if($$) free($$); }
-%destructor substitution_of_var { if($$) free($$); }
+//%destructor substitution_of_var { if($$) free($$); }
 %destructor value { if($$) free($$); }
 %destructor for_cycle { 
 	if($$) {
@@ -58,12 +58,12 @@ Grammar rules for shell.
 		free($$);
 	}		
 }
-%destructor while_cycle { 
+/*%destructor while_cycle { 
 	if($$) {
 		freeWhileCycleStruct(*$$);
 		free($$);
 	}		
-}
+}*/
 %destructor variable { 
 	if($$) free($$); 
 }
@@ -105,10 +105,10 @@ Grammar rules for shell.
 %type redirection { struct part_redirection_struct* }
 %type argument_list { char* }
 %type argument { char* }
-%type substitution_of_var { char * }
+//%type substitution_of_var { char * }
 %type value { char* }
 %type for_cycle { struct for_cycle_struct* }
-%type while_cycle { struct while_cycle_struct* }
+//%type while_cycle { struct while_cycle_struct* }
 %type variable { char* }
 %type condition { struct operate_at_variabe_struct* }
 %type branchig { struct if_branch_struct* }
@@ -202,6 +202,10 @@ result(res) ::= alias_declaration . {
 	res = NULL;
 }
 
+result(res) ::= unalias_rm .{
+	res = NULL;
+}
+
 result(res) ::= for_cycle(cycle) . { 
 	res = (struct list_struct*) malloc (sizeof(struct list_struct));
 	res->redirection = NULL;
@@ -218,7 +222,7 @@ result(res) ::= for_cycle(cycle) . {
 	cycle = NULL;
 }
 
-result(res) ::= while_cycle(cycle) . {
+/*result(res) ::= while_cycle(cycle) . {
 	res = (struct list_struct*) malloc (sizeof(struct list_struct));
 	struct whole_command_struct* whole_cmd = (struct whole_command_struct*) malloc (sizeof(struct whole_command_struct));
 	res->redirection = NULL;
@@ -231,11 +235,11 @@ result(res) ::= while_cycle(cycle) . {
 	whole_cmd->connectionWithNextBitMask = CONNECT_NO;
 	addWholeCommandToList(res, whole_cmd);
 	cycle = NULL;
-}
+}*/
 
 //FOR_CYCLE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-for_cycle(cycle) ::= FOR FROM bound(low) UNTIL bound(hight) SEMICOLON DO input(res). {
+for_cycle(cycle) ::= /*FOR*/ FROM bound(low) UNTIL bound(hight) /*SEMICOLON*/ DO input(res). {
 		
 	cycle = (struct for_cycle_struct*) malloc (sizeof(struct for_cycle_struct));
 	
@@ -252,10 +256,12 @@ bound(bou) ::= DIGIT(dig) . {
 	bou = dig;
 	dig = NULL;
 }
-bound(bou) ::= substitution_of_var(sub) . {
+
+bound(bou) ::= VAR_NAME(sub) . {
 	bou = findVariable (sub);
 }
 
+/*
 //WHILE_CYCLE
 
 while_cycle(while_cycle) ::= WHILE condition(cond) SEMICOLON DO input(res) . { 
@@ -264,7 +270,7 @@ while_cycle(while_cycle) ::= WHILE condition(cond) SEMICOLON DO input(res) . {
 	while_cycle->instractionsToDo = res;
 	cond = NULL;
 	res = NULL;
-}
+}*/
 
 //INPUT
 
@@ -280,7 +286,7 @@ input(inp) ::= command_line_list(cmd_line_list) redirection_list(red_list) . {
 	cmd_line_list = NULL;
 	red_list = NULL;
 }
-
+/*
 //SUBSTITUTION_OF_VARIABLE
 
 substitution_of_var(subs) ::= DOLLARLPAREN FILENAME(ptr) RPAREN .{
@@ -288,7 +294,7 @@ substitution_of_var(subs) ::= DOLLARLPAREN FILENAME(ptr) RPAREN .{
 	
 	ptr = NULL;
 }
-
+*/
 
 //CMDLINELIST
 
@@ -382,6 +388,14 @@ command(cmd) ::= ARGUMENT(name) .	{
 	name = NULL;
 }
 
+//unalias_rm
+
+unalias_rm ::= UNALIAS argument(arg) . {
+	deleteAlias(arg);
+	free (arg);
+	arg = NULL;
+}
+
 //ALIAS_DECLARATION
 
 alias_declaration ::= ALIAS variable(name) EQU ARGUMENT(arg) . {
@@ -468,7 +482,7 @@ redirection(redir) ::= GREATGREAT argument(arg) . {
 
 //BRANCHING
 
-branchig(branch) ::= IF condition(cond) THEN result(trueRes) ELSE result(falseRes) FI . { 
+branchig(branch) ::= IF condition(cond) THEN result(trueRes) ELSE result(falseRes)/* FI */. { 
 	branch = (struct if_branch_struct*) malloc(sizeof(struct if_branch_struct));
 	branch->conditional = cond;
 	branch->trueWay = trueRes;
@@ -478,7 +492,7 @@ branchig(branch) ::= IF condition(cond) THEN result(trueRes) ELSE result(falseRe
 	cond = NULL;
 }
 
-branchig(branch) ::= IF condition(cond) THEN COLON ELSE result(res) FI . {
+branchig(branch) ::= IF condition(cond) THEN COLON ELSE result(res)/* FI */. {
 	branch = (struct if_branch_struct*) malloc(sizeof(struct if_branch_struct));
 	branch->conditional = cond;
 	branch->trueWay = NULL;
@@ -487,7 +501,7 @@ branchig(branch) ::= IF condition(cond) THEN COLON ELSE result(res) FI . {
 	res = NULL;
 }
 
-branchig(branch) ::= IF condition(cond) THEN result(res) ELSE COLON FI.	{
+branchig(branch) ::= IF condition(cond) THEN result(res) ELSE COLON/* FI*/.	{
 	branch = (struct if_branch_struct*) malloc(sizeof(struct if_branch_struct));
 	branch->conditional = cond;
 	branch->trueWay = res;
@@ -557,7 +571,7 @@ argument(arg) ::= ARGUMENT(ptr) .	{
 	ptr = NULL;
 }
 
-argument (arg) ::= substitution_of_var(subs) . {
+argument (arg) ::= VAR_NAME(subs) . {
 	arg = findVariable (subs);
 }
 
