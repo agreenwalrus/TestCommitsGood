@@ -12,6 +12,8 @@ Grammar rules for shell.
 	#include "shell_system.h"
 }
 
+%token_destructor {}
+
 %destructor result { if($$){
 	freeListStruct(*$$); 
 	free($$); 

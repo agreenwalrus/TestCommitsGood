@@ -1,0 +1,7 @@
+exit
+from 1 until 4 do echo love && sleep 1000
+cd .
+cd ..
+exit
+exit
+exit
