@@ -116,16 +116,13 @@ Grammar rules for shell.
 %type branchig { struct if_branch_struct* }
 
 %syntax_error {  
-  printf("\nSyntax error!");  
+  printf("Syntax error!\n");  
 }  
 
 %parse_failure {
-	printf("\nParse failure!");
+	printf("No such combination. Call 'help'.\n");
 }
 
-%parse_accept {
-	printf("\nParsing's been done!");
-}
 
 %stack_overflow {
 	printf("\nParser stack overflow!");
@@ -492,6 +489,7 @@ branchig(branch) ::= IF condition(cond) THEN result(trueRes) ELSE result(falseRe
 	trueRes = NULL;
 	falseRes = NULL;
 	cond = NULL;
+	cond = NULL;
 }
 
 branchig(branch) ::= IF condition(cond) THEN COLON ELSE result(res)/* FI */. {
@@ -500,7 +498,7 @@ branchig(branch) ::= IF condition(cond) THEN COLON ELSE result(res)/* FI */. {
 	branch->trueWay = NULL;
 	branch->falseWay = res;
 	res = NULL;
-	res = NULL;
+	cond = NULL;
 }
 
 branchig(branch) ::= IF condition(cond) THEN result(res) ELSE COLON/* FI*/.	{
@@ -509,7 +507,7 @@ branchig(branch) ::= IF condition(cond) THEN result(res) ELSE COLON/* FI*/.	{
 	branch->trueWay = res;
 	branch->falseWay = NULL;
 	res = NULL;
-	res = NULL;
+	cond = NULL;
 }
 
 //CONDITION

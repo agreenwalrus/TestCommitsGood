@@ -4,4 +4,289 @@ cd .
 cd ..
 exit
 exit
+#
+exit
+from 1 until 4 do echo love && sleep 1000
+from 1 until 4 do echo love && sleep 1000
+from 1 until 10 do echo love && sleep 1000
+from 1 until 10 do echo love && sleep 1000 &
+from 1 until 10 do echo love && sleep 1000 &
+from 1 until 10 do echo love && sleep 1000 &
+a = 1000
+echo $a
+alias home = "C:\emu8086"
+cd home
+clear
+ls -al | shell
+total 482
+total 482
+ls -al | shell
+total 482
+ls -al | .c
+ls -al | grep .c
+ls -al | shell
+total 482
+ls -al| grep shell
+shell
+shell
+shell
+exit
+shell
+exit
+wc 
+wc shell_history.txt 
+gsub
+'gsub
+exit
+exit
+exit
+kskdj
+exit
+sll
+sdskl
+exit
+kldk
+exit
+cd ..
+cd ..
+cd ..
+cd Google Диск/
+ls
+ls -al | grep Google Диск/
+ls -al | grep Gog
+ls -al | grep Goog
+ls -al | grep Google
+cd ../../..
+ls -al | grep Google
+cd Desktop/
+cd CrtPrcs_lab1/
+make
+make clean
+make
+ls -al | grep exe
+programm.exe 
+Chld.exe 
+cd ../src
+cat input.txt 
+cat output.txt 
+input.txt  > output.txt 
+cat input.txt  > output.txt 
+cat output.txt 
+cat output.txt 
+exit
+cd ..
+cd src/
+cat output.txt 
+cat input.txt 
+cat output.txt  > input.txt 
+cat input.txt 
+cat output.txt 
+exit
+getAliases
+alias e = "echo"
+getAliases
+unalias "e"
+getAliases
+alias e = "echo"
+getAliases
+exit
+help
+exit
+getAliases
+exit
+clear
+getAliases
+alias e = "echo"
+e Julia is cool
+getAliases
+exit
+echo love
+exit
+exit
+exit
+exit
+echo love
+exit
+exitexit
+dkel
+from fkjfd until ksldk do echo love
+from 1 until 0 do echo love
+ds
+if a > 10 then echo true else echo false
+if [a > 10] then echo true else echo false
+a = 9
+if [a > 10] then echo true else echo false
+echo $a
+if [a > 10] then echo true else echo false
+if [a < 10] then echo true else echo false
+ = 9
+a = 9
+if [a != 10] then echo true else echo false
+if [a != 10] then echo true else echo false
+if [a  10] then echo true else echo false
+if [a >  10] then echo true else echo false
+a 
+a = 9
+if [a >  10] then echo true else echo false
+if [a <  10] then echo true else echo false
+if [a < 10] then echo true else echo false
+if [a < 10] then echo true else echo false
+if [a < 8] then echo true else echo false
+if [a > 8] then echo true else echo false
+a = 9
+if [a > 8] then echo true else echo false
+if [a > 10] then echo true else echo false
+if [a > 10000] then echo true else echo false
+if [a < 10000] then echo true else echo false
+echo $a
+if [a == 10000] then echo true else echo false
+if [a == 10000] then echo true else echo false
+exit
+ = 9
+a = 9
+if [a == 10000] then echo true else echo false
+if [a == 9] then echo true else echo false
+exit
+a = 9
+if [a == 9] then echo true else echo false
+if [a == 10000] then echo true else echo false
+if [a == 0] then echo true else echo :
+if [a == 0] then echo true else echo :
+if [a == 0] then echo love else : 
+exit
+alias jul = "echo"
+help
+getAliases
+unalias "jul"
+getAliases
+alias jul = "echo"
+jul Julia is cool
+from 1 until 10 do jul Julia is cool && sleep 1000
+from 1 until 10 do jul Julia is cool && sleep 1000 &
+cd ..
+cd ..
+exit
+echo love
+exit
+echo love
+exit
+echo love
+exit
+echo love
+from 1 until 0 do echo love
+from 1 until 10 do echo love
+from 1 until 10 do echo love && sleep 1000
+from 1 until 10 do echo love && sleep 1000 &
+cd ..
+alias jul = "[wd"
+getAliases
+exit
+alias jul = "pwd"
+getAliases
+jul
+jul popo
+sleep 10
+sleep 1000
+sleep 1000 && echo love
+sleep 1000 || echo love
+exit
+sleep 1000 || echo love
+ls > output.txt
+echo Julia && alsklaks
+echo Julia || alsklaks
+echo Julia || alsklaks
+echo Julia
+exit
+echo Julia
+echo Julia || alsklaks
+echo Julia && alsklaks
+exit
+echo Julia && alsklaks
+echo Julia || alsklaks
+ls | askslla
+ls | grep hist | wdjwkj
+ls | grep hist
+ls | grep hist
+ls -al | grep his
+exit
+ls -al | grep his
+ls 
+ls | grep
+ls | grep ls
+ls | grep hist
+ls | grep history
+ls | grep shell
+ls > output.txt
+cat output.txt 
+ls | grep output
+ls -al | grep output
+ls -al 
+ls -al | grep dll
+ls -al | grep dll > output.txt 
+cat output.txt 
+rm output.txt 
+ls
+pwd
+kill
+ps
+ps | grep Tele
+kill 5844
+kill /&
+kill /?
+kill /?
+kill \?
+kill /5844
+kill /pid 5844
+ps | sort
+ps | sort | grep svhost
+ps | sort | grep svchost
+exit
+echo < input.txt
+exit
+ls < input
+ls < shell_history.txt 
+ls < shell_history
+from 1 until 10 do echo love
+from 1 until 10 do echo love && sleep 1000 &
+from 1 until 10 do echo love && sleep 1000
+from 1 until $a do echo love && sleep 1000
+echo $a
+a = 5
+echo $a
+from 1 until $a do echo love && sleep 1000
+exit
+from 1 until $a do echo love && sleep 1000
+a = 5
+from 1 until $a do echo love && sleep 1000
+from 10 until $a do echo love && sleep 1000
+if [a > 10] then echo true else echo false
+if [a == 10] then echo true else echo false
+if [a < 10] then echo true else echo false
+if [a == 5] then echo true else echo false
+if [a < 5] then echo true else echo false
+if [a > 5] then echo true else echo false
+if [a > 4] then echo true else echo false
+if [a < 4] then echo true else echo false
+if [a < 10] then echo true else echo false
+if [a < 22] then echo true else echo false
+exit
+a = 5
+if [a < 22] then echo true else echo false
+if [a < 10] then echo true else echo false
+if [a < 4] then echo true else echo false
+a = aa
+if [a < ab] then echo true else echo false
+exit
+a = aa
+if [a < ab] then echo true else echo false
+if [a < aaa] then echo true else echo false
+if [a < b] then echo true else echo false
+if [a < b] then echo true else echo false
+if [a > b] then echo true else echo false
+if [a > a] then echo true else echo false
+help
+exit
+help
+exit
+help
 exit

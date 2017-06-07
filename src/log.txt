@@ -1,49 +1,55 @@
 
-Parser state: Input ALIAS
+Parser state: Input FILENAME
 
-Parser state: Shift 9
+Parser state: Shift 32
 
-Parser state: Stack: ALIAS
+Parser state: Stack: FILENAME
 
 Parser state: Input FILENAME
 
+Parser state: Reduce [command ::= FILENAME].
+
+Parser state: Shift 5
+
+Parser state: Stack: command
+
 Parser state: Shift 30
 
-Parser state: Stack: ALIAS FILENAME
-
-Parser state: Input EQU
-
-Parser state: Reduce [argument ::= FILENAME].
-
-Parser state: Shift 47
-
-Parser state: Stack: ALIAS argument
-
-Parser state: Reduce [variable ::= argument].
-
-Parser state: Shift 75
-
-Parser state: Stack: ALIAS variable
-
-Parser state: Shift 74
-
-Parser state: Stack: ALIAS variable EQU
-
-Parser state: Input ARGUMENT
-
-Parser state: Shift 52
-
-Parser state: Stack: ALIAS variable EQU ARGUMENT
+Parser state: Stack: command FILENAME
 
 Parser state: Input $
 
-Parser state: Reduce [alias_declaration ::= ALIAS variable EQU ARGUMENT].
+Parser state: Reduce [argument ::= FILENAME].
 
-Parser state: Shift 57
+Parser state: Shift 35
 
-Parser state: Stack: alias_declaration
+Parser state: Stack: command argument
 
-Parser state: Reduce [result ::= alias_declaration].
+Parser state: Reduce [argument_list ::= argument].
+
+Parser state: Shift 13
+
+Parser state: Stack: command argument_list
+
+Parser state: Reduce [command_line ::= command argument_list].
+
+Parser state: Shift 37
+
+Parser state: Stack: command_line
+
+Parser state: Reduce [command_line_list ::= command_line].
+
+Parser state: Shift 6
+
+Parser state: Stack: command_line_list
+
+Parser state: Reduce [input ::= command_line_list].
+
+Parser state: Shift 60
+
+Parser state: Stack: input
+
+Parser state: Reduce [result ::= input].
 
 Parser state: Shift 63
 

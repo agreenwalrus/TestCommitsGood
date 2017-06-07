@@ -19,7 +19,8 @@ char *system_commands_shell[] = {
 	"exit",
 	"help",
 	"clear",
-	"alias"
+	"alias",
+	"getAliases"
 };
 void getHistoryFilePath(char* buffer, int size)
 {
@@ -28,10 +29,8 @@ void getHistoryFilePath(char* buffer, int size)
 		printf ("Error of getting current directory %d\n", (int)GetLastError());
 		return;
 	}
-	printf("%s", buffer);
 	strncat(buffer, "\\\0", size);
 	strncat(buffer, HISTORY_FILE, size);
-	printf("%s", buffer);
 }
 void resetHandles()
 {
@@ -43,7 +42,6 @@ void resetHandles()
 
 void WaitForMultipleProcceses()
 {
-	printf("\nWaitForMultipleObjects %d", amountOfProc);
 	WaitForMultipleObjects((DWORD)amountOfProc, hProccesses, TRUE, INFINITE);
 	resetHandles();
 }
@@ -80,7 +78,7 @@ Check name of command at **system_commands_shell; If it should be excecuted at c
 BOOL isMountedCommand(struct command_struct cmd)
 {
 	int i;
-	printf("\nIs mounted %s", cmd.nameOfCmd);
+
 	for (i = 0; i < AMOUNT_OF_SYSTEM_CMDS; i++)
 		if (!strcmp(system_commands_shell[i], cmd.nameOfCmd))
 			return TRUE;
@@ -97,15 +95,11 @@ NULL - if not
 char* findVariable (char *varName)
 {
 	int i;
-	printf("\nfindVariable");
 	
 	for (i = 0; i < amount_of_global_variables; i++)
 		if (!strcmp(varName, global_variable_array[i].varName))
 			if (global_variable_array[i].varValue)
-			{
-				printf("\nfindVariable %s %s", varName, global_variable_array[i].varValue);
 				return strdup(global_variable_array[i].varValue);
-			}
 	return NULL;
 }
 
@@ -277,7 +271,6 @@ add new variable to global_variable_array
 int addVariable(struct variable_struct newVariable)
 {
 	int i;
-	printf("\naddVariable %s %s %d", newVariable.varName, newVariable.varValue, amount_of_global_variables);
 	
 	if (amount_of_global_variables == global_variable_array_size)
 		if (reallocGlobalVariableArray())
@@ -305,7 +298,6 @@ add new Alias
 int addAlias(struct variable_struct newVariable)
 {
 	int i;
-	printf("\naddAlias %s %s %d", newVariable.varName, newVariable.varValue, amount_of_alias_variables);
 	
 	if (amount_of_alias_variables == alias_array_size)
 		if (reallocAliasArray())
@@ -343,3 +335,26 @@ void deleteAlias(char* aliasName)
 			amount_of_alias_variables--;
 		}
 }
+
+void getAliases ()
+{
+	int i;
+
+	printf ("Shell aliases:\n\n");
+	if (!amount_of_alias_variables)
+	{
+		printf("No aliases.\n");
+		return;
+	}
+	for (i = 0; i < amount_of_alias_variables; i++)
+		printf("%s - %s\n", alias_array[i].varName, alias_array[i].varValue);
+	return;
+}
+
+
+
+
+
+
+
+

@@ -10,7 +10,7 @@
 #define HISTORY_FILE "shell_history.txt"
 
 #define START_SIZE 10
-#define AMOUNT_OF_SYSTEM_CMDS 6
+#define AMOUNT_OF_SYSTEM_CMDS 7
 #define CONSOLE_NAME "Shell for Windows @JR"
 
 
@@ -25,6 +25,7 @@ int addVariable(struct variable_struct);
 int addAlias(struct variable_struct);
 char* findVariable (char *);
 char* getAlias(char* );
+void getAliases ();
 BOOL isMountedCommand(struct command_struct);
 void getHistoryFilePath(char*, int);
 int initHProccesses (int);

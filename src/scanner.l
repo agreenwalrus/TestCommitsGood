@@ -52,7 +52,6 @@ Here're described rules for scanning char buffers.
 "until"					{ return UNTIL; }
 
 
-
 "="						{ return EQU; }
 "=="					{ return EQUEQU; }
 "["                  	{ return LBRACKET; }
@@ -85,7 +84,6 @@ Here're described rules for scanning char buffers.
 
 "$"[a-zA-Z]+      {
 	yylval.charValue = strdup(&yytext[1]);
-	printf("Value: %s", yylval.charValue);
 	return VAR_NAME; 
 }
 
@@ -94,7 +92,6 @@ Here're described rules for scanning char buffers.
 	if (!(temp = getAlias(yytext)))
 		yylval.charValue = strdup(yytext);
 	else yylval.charValue = temp;
-	printf("Value: %s", yylval.charValue);
 	return FILENAME; 
 }	
 
